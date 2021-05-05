@@ -3,9 +3,52 @@
 
 <mapper namespace="Home">
 
- 	<!-- Forum 글 쓰기 -->
-    <insert id="setwrite" parameterType="com.blog.home.HomeVo"> 
-       insert into post(title,content,writer) values('${title}','1','1')
-    </insert> 
-	
-	</mapper>
+	<!-- Home 글 목록 가져오기 -->
+	<select id="GetPostList" parameterType="com.blog.home.HomeVo"
+		resultType="com.blog.home.HomeVo">
+		select * from post order by seq desc
+	</select>
+
+	<!-- Home 글 쓰기 -->
+	<insert id="SetWrite" parameterType="com.blog.home.HomeVo">
+		insert into
+		post(title,content,writer)
+		values('${title}','${content}','${writer}')
+	</insert>
+
+	<!-- POST 댓글 쓰기 -->
+	<insert id="SetPostComment"
+		parameterType="com.blog.home.HomeCommentVo">
+		insert into postcomment(post_seq,userid,comment)
+		values(${post_seq},'${userid}','${comment}')
+	</insert>
+
+	<!-- POST 대댓글 쓰기 -->
+	<insert id="SetCommentReply"
+		parameterType="com.blog.home.HomeCommentVo">
+		insert into
+		commentreply(post_seq,reply_seq,userid,comment)
+		values(${post_seq},'${reply_seq}','${userid}','${comment}')
+	</insert>
+
+	<!-- Home 글 디테일 가져오기 -->
+	<select id="GetViewDetail" parameterType="com.blog.home.HomeVo"
+		resultType="com.blog.home.HomeVo">
+		select * from post where seq =${seq}
+	</select>
+
+	<!-- Post 댓글 목록 가져오기 -->
+	<select id="GetCommentList" parameterType="com.blog.home.HomeVo"
+		resultType="com.blog.home.HomeCommentVo">
+		select * from postcomment where post_seq =${seq} order by
+		seq desc
+	</select>
+
+	<!-- Post 대댓글 목록 가져오기 -->
+	<select id="GetReplyList" parameterType="com.blog.home.HomeCommentVo"
+		resultType="com.blog.home.HomeCommentVo">
+		select * from commentreply where reply_seq =${seq} order by
+		seq desc
+	</select>
+
+</mapper>

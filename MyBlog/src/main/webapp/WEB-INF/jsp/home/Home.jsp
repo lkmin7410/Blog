@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>   
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -28,9 +31,15 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Services</a></li>
+                        <c:if test="${not empty sessionScope.session_id}">
+                        <li class="nav-item"><a class="nav-link" href="Login">로그아웃</a></li>
                         <li class="nav-item"><a class="nav-link" href="Write">글쓰기</a></li>
+                        </c:if>
+                        
+                         <c:if test="${empty sessionScope.session_id}">
+                        <li class="nav-item"><a class="nav-link" href="Login">로그인</a></li>
+                        <li class="nav-item"><a class="nav-link" href="SignUp">회원가입</a></li>
+                        </c:if>
                     </ul>
                 </div>
             </div>
@@ -45,44 +54,22 @@
                         <small>Secondary Text</small>
                     </h1>
                     <!-- Blog post-->
+                    <c:forEach var="i" items="${PostList}"> 
+                    
                     <div class="card mb-4">
                         <img class="card-img-top" src="https://via.placeholder.com/750x300" alt="Card image cap" />
                         <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
+                            <h2 class="card-title">${i.title}</h2>
                             <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                            <a class="btn btn-primary" href="#!">Read More →</a>
+                            <a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read More →</a>
                         </div>
                         <div class="card-footer text-muted">
-                            Posted on January 1, 2021 by
+                            ${i.regdate}
                             <a href="#!">Start Bootstrap</a>
                         </div>
                     </div>
-                    <!-- Blog post-->
-                    <div class="card mb-4">
-                        <img class="card-img-top" src="https://via.placeholder.com/750x300" alt="Card image cap" />
-                        <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                            <a class="btn btn-primary" href="#!">Read More →</a>
-                        </div>
-                        <div class="card-footer text-muted">
-                            Posted on January 1, 2021 by
-                            <a href="#!">Start Bootstrap</a>
-                        </div>
-                    </div>
-                    <!-- Blog post-->
-                    <div class="card mb-4">
-                        <img class="card-img-top" src="https://via.placeholder.com/750x300" alt="Card image cap" />
-                        <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                            <a class="btn btn-primary" href="#!">Read More →</a>
-                        </div>
-                        <div class="card-footer text-muted">
-                            Posted on January 1, 2021 by
-                            <a href="#!">Start Bootstrap</a>
-                        </div>
-                    </div>
+                    
+                    </c:forEach>
                     <!-- Pagination-->
                     <ul class="pagination justify-content-center mb-4">
                         <li class="page-item"><a class="page-link" href="#!">← Older</a></li>

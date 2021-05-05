@@ -7,10 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="Write" method="post">
-<input type="text" name="title">
-<input type="text" name="content">
-<input type="hidden" name="writer" value="${sessionScope.session_id}">
+<form action="Login" method="post">
+<input type="text" name="userid">
+<input type="text" name="userpw">
 <input type="submit" value="입력">
 </form>
 </body>

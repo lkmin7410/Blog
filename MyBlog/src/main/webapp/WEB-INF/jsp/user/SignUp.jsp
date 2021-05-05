@@ -7,10 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="Write" method="post">
-<input type="text" name="title">
-<input type="text" name="content">
-<input type="hidden" name="writer" value="${sessionScope.session_id}">
+<form action="SignUp" method="post">
+이름<input type="text" name="username">
+아이디<input type="text" name="userid">
+비번<input type="text" name="userpw">
+이메일<input type="text" name="useremail">
 <input type="submit" value="입력">
 </form>
 </body>
