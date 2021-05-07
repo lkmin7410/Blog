@@ -1,26 +1,15 @@
 package com.blog.home;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 @Controller
@@ -33,11 +22,15 @@ public class HomeCtr {
 	 * 메인 홈페이지 글 목록 가져오기
 	 */
 	@RequestMapping(value = "Home")
-	public String Home(ModelMap modelMap, HomeVo HomeVo) {
+	public String Home(ModelMap modelMap, HomeSearchVO HomeSearchVO) {
 
-		List<?> PostList = HomeSvc.GetPostList(HomeVo);
+		HomeSearchVO.pageCalculate(HomeSvc.selectHomeCount(HomeSearchVO));
 
+		List<?> PostList = HomeSvc.GetPostList(HomeSearchVO);
+
+		modelMap.addAttribute("so", HomeSearchVO);
 		modelMap.addAttribute("PostList", PostList);
+		
 		return "home/Home";
 	}
 

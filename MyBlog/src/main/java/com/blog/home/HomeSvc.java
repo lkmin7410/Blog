@@ -11,12 +11,17 @@ public class HomeSvc {
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	//Home 글 목록 갯수 가져오기
+	public Integer selectHomeCount(HomeSearchVO param) {
+
+		return sqlSession.selectOne("selectHomeCount", param);
+	}
 
 	//글 목록 가져오기
-	public List<?> GetPostList(HomeVo param){
+	public List<?> GetPostList(HomeSearchVO param){
 		
 		return sqlSession.selectList("GetPostList",param);
-		
 	}
 	
 	//글 쓰기
@@ -52,6 +57,8 @@ public class HomeSvc {
 		
 		return sqlSession.selectList("GetReplyList",param);
 	}
+	
+
 
 	
 }

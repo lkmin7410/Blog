@@ -3,10 +3,24 @@
 
 <mapper namespace="Home">
 
+	<!-- Home List Row 갯수 -->
+	<select id="selectHomeCount" resultType="Integer"
+		parameterType="com.blog.home.HomeSearchVO">
+		select count(c.title) from (select distinct *
+		from post where title
+		like '%${searchKeyword}%') as c
+	</select>
+
 	<!-- Home 글 목록 가져오기 -->
-	<select id="GetPostList" parameterType="com.blog.home.HomeVo"
-		resultType="com.blog.home.HomeVo">
-		select * from post order by seq desc
+	<select id="GetPostList"
+		resultType="com.blog.home.HomeVo"
+		parameterType="com.blog.home.HomeSearchVO">
+		select * from (select @rownum:=@rownum+1 as rownum, n.*
+		from
+		(select * from post where title like '%${searchKeyword}%')n ,
+		(select @rownum:=0)as r) s
+		where rownum between
+		${rowEnd} and ${rowStart} order by rownum desc
 	</select>
 
 	<!-- Home 글 쓰기 -->
