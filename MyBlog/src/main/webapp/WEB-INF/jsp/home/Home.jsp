@@ -16,6 +16,17 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        
+        <style type="text/css">
+        .card-title, .card-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+        
+        
+        </style>
+        
     </head>
     <body>
         <!-- Navigation-->
@@ -60,7 +71,7 @@
                         <img class="card-img-top" src="https://via.placeholder.com/750x300" alt="Card image cap" />
                         <div class="card-body">
                             <h2 class="card-title">${i.title}</h2>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+                            <p class="card-text">${i.content}</p>
                             <a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read More →</a>
                         </div>
                         <div class="card-footer text-muted">
@@ -88,6 +99,28 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 프로필? -->
+                    <c:if test="${not empty sessionScope.session_id}">
+                     <div class="card my-4">
+                        <h5 class="card-header">Profile</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="#!">${sessionScope.session_id}님의 블로그</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="Write">글 쓰기</a></li>
+                                        <li><a href="#!">CSS</a></li>
+                                        <li><a href="#!">로그아웃</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </c:if>
                     <!-- Categories widget-->
                     <div class="card my-4">
                         <h5 class="card-header">Categories</h5>

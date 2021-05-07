@@ -68,7 +68,7 @@
 				<hr />
 				<!-- Post content-->
 				<p class="lead">${HomeVo.content}</p>
-				<blockquote class="blockquote">
+				<%-- <blockquote class="blockquote">
 					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur
 						adipiscing elit. Integer posuere erat a ante.</p>
 					<footer class="blockquote-footer">
@@ -82,7 +82,7 @@
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 					Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione
 					tempore quidem voluptates cupiditate voluptas illo saepe quaerat
-					numquam recusandae? Qui, necessitatibus, est!</p>
+					numquam recusandae? Qui, necessitatibus, est!</p> --%>
 				<hr />
 				<!-- Comments form-->
 				<div class="card my-4">
