@@ -71,7 +71,7 @@ border-color:rgb(24, 26, 27);
 						<script type="text/javascript">
 							$(function() {
 								CKEDITOR.replace('p_content', {
-								filebrowserUploadUrl : 'fileUpload'
+								/* filebrowserUploadUrl : 'fileUpload' */
 								});
 							});
 						</script>
