@@ -68,13 +68,7 @@ border-color:rgb(24, 26, 27);
 					<div class="form-group">
 						<textarea name="content" id="p_content" class="form-control"
 							rows="30"></textarea>
-						<script type="text/javascript">
-							$(function() {
-								CKEDITOR.replace('p_content', {
-								/* filebrowserUploadUrl : 'fileUpload' */
-								});
-							});
-						</script>
+
 					</div>
 					<hr />
 					<input type="hidden" name="writer"
@@ -85,6 +79,42 @@ border-color:rgb(24, 26, 27);
 		</div>
 	</form>
 
+	<script type="text/javascript">
+							$(function() {
+								CKEDITOR.replace('p_content', {
+									filebrowserUploadUrl : 'fileUpload'
+								});
+							});
+						</script>
+	<script type="text/javascript">
+							CKEDITOR.config.disallowedContent = 'img{width,height}';
+							CKEDITOR.on('instanceReady',function(ev) {
+										ev.editor.dataProcessor.htmlFilter.addRules({
+										elements : {$ : function(element) {
+										if (element.name == 'img') {
+										if (element.attributes.style) {
+										element.attributes.style = element.attributes.style
+										.replace(/(height|width)[^;]*;/gi,'');}}
+										if (!element.attributes.style)
+										delete element.attributes.style;
+										return element;}
+										}
+										});
+										});
+						</script>
+	<script type="text/javascript">
+							CKEDITOR.on('dialogDefinition',function(ev) {
+							var dialogName = ev.data.name;
+							var dialog = ev.data.definition.dialog;
+							var dialogDefinition = ev.data.definition;
+							if (dialogName == 'image') {dialog.on('show',function(obj) {
+							this.selectPage('Upload'); //업로드텝으로 시작
+							});
+							dialogDefinition.removeContents('advanced'); // 자세히탭 제거
+							dialogDefinition.removeContents('Link'); // 링크탭 제거
+							}
+							});
+						</script>
 	<!-- Bootstrap core JS-->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script

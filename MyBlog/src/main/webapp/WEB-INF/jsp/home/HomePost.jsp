@@ -21,7 +21,10 @@
 	src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 
 <style>
-.hide {display:none} /*숨기기*/
+p>img{
+ max-width: 100%;
+  height: auto;
+}
 </style>
 
 </head>
@@ -63,26 +66,11 @@
 				<p>${HomeVo.regdate}</p>
 				<hr />
 				<!-- Preview image-->
-				<img class="img-fluid rounded"
-					src="https://via.placeholder.com/900x300" alt="..." />
-				<hr />
+				<!-- <img class="img-fluid rounded"
+					src="https://via.placeholder.com/900x300" alt="..." /> -->
+				<!-- <hr /> -->
 				<!-- Post content-->
 				<p class="lead">${HomeVo.content}</p>
-				<%-- <blockquote class="blockquote">
-					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur
-						adipiscing elit. Integer posuere erat a ante.</p>
-					<footer class="blockquote-footer">
-						Someone famous in <cite title="Source Title">Source Title</cite>
-					</footer>
-				</blockquote>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-					Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora
-					commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem
-					obcaecati?</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-					Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione
-					tempore quidem voluptates cupiditate voluptas illo saepe quaerat
-					numquam recusandae? Qui, necessitatibus, est!</p> --%>
 				<hr />
 				<!-- Comments form-->
 				<div class="card my-4">

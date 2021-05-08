@@ -24,6 +24,11 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.card-body img{
+max-width: 100%;
+  height: auto;
+}
 </style>
 
 </head>
@@ -67,8 +72,8 @@
 				<c:forEach var="i" items="${PostList}">
 
 					<div class="card mb-4">
-						<img class="card-img-top"
-							src="https://via.placeholder.com/750x300" alt="Card image cap" />
+						<!-- <img class="card-img-top"
+							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
 						<div class="card-body">
 							<h2 class="card-title">${i.title}</h2>
 							<p class="card-text">${i.content}</p>
