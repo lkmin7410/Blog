@@ -1,6 +1,8 @@
 package com.blog.user;
 
 
+import java.net.MalformedURLException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -39,9 +41,19 @@ public class UserCtr {
  		} catch (Exception e) {
  			return "user/Login";
  		}
-
  	}
     
+	// 로그아웃
+	@RequestMapping(value = "/Logout")
+	public String Logout(HttpServletRequest req, UserVo uo, ModelMap modelMap) throws MalformedURLException {
+		HttpSession session = req.getSession();
+	
+			session.removeAttribute("session_id");
+
+		return "redirect:/Home";
+	}
+ 	
+ 	
     /* 회원가입 페이지 */
     @RequestMapping(value = "SignUp")
     public String HomeSignUp() {

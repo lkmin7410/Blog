@@ -37,26 +37,44 @@ public class HomeCtr {
 	@RequestMapping(value = "Home")
 	public String Home(ModelMap modelMap, HomeSearchVO HomeSearchVO) {
 
-		HomeSearchVO.pageCalculate(HomeSvc.selectHomeCount(HomeSearchVO));
-
-		List<?> PostList = HomeSvc.GetPostList(HomeSearchVO);
-
+		HomeSearchVO.pageCalculate(HomeSvc.selectHomeCount(HomeSearchVO)); //페이징 처리
+		List<?> PostList = HomeSvc.GetPostList(HomeSearchVO); //게시글 리스트
+		List<HomeVo>CommentList = HomeSvc.GetRecentComments(); //최근 댓글 리스트
+		List<?>Categories = HomeSvc.GetCategories(); //카테고리 리스트 가져오기
+		
 		modelMap.addAttribute("so", HomeSearchVO);
 		modelMap.addAttribute("PostList", PostList);
+		modelMap.addAttribute("CommentList", CommentList);
+		modelMap.addAttribute("Categories",Categories);
 		
 		return "home/Home";
 	}
 
+	/* 카테고리 생성 */
+	@RequestMapping(value = "Categories", method = RequestMethod.POST)
+	public String Categories(HomeVo HomeVo) {
+		
+		HomeSvc.SetCategories(HomeVo.getCategories());
+		
+		return "redirect:/Home";
+	}
+	
+
 	/* 글 쓰기 페이지 */
 	@RequestMapping(value = "Write")
-	public String HomeWrite() {
-
+	public String HomeWrite(ModelMap modelMap) {
+		
+		List<?>Categories = HomeSvc.GetCategories();
+		
+		modelMap.addAttribute("Categories",Categories);
+		
 		return "home/HomeWrite";
 	}
 
 	/* 글 쓰기 POST방식 데이터 받는 컨트롤러 */
 	@RequestMapping(value = "Write", method = RequestMethod.POST)
 	public String HomeWritePost(HttpServletRequest request, ModelMap modelMap, HomeVo HomeVo) {
+		System.out.println("111111111111111111111"+HomeVo.getCategories());
 
 		HomeSvc.SetWrite(HomeVo);
 
@@ -121,16 +139,13 @@ public class HomeCtr {
         return null;
      }   
 	
-
 	/* 글 보기 디테일 */
 	@RequestMapping(value = "HomePost")
 	public String HomePostView(HttpServletRequest request, ModelMap modelMap, HomeVo HomeVo) {
 		/* 글 디테일 보기 */
 		HomeVo = HomeSvc.GetViewDetail(HomeVo);
-		
 		/* 부모 댓글 리스트 가져오기 */
 		List<HomeCommentVo>CommentList = HomeSvc.GetCommentList(HomeVo);
-		
 		//부모
         List<HomeCommentVo> boardReplyListParent = new ArrayList<HomeCommentVo>();
         //자식
@@ -138,8 +153,6 @@ public class HomeCtr {
         //통합
         List<HomeCommentVo> newBoardReplyList = new ArrayList<HomeCommentVo>();
         
-        
-		
 		for(HomeCommentVo Reply : CommentList) {
 			
 			boardReplyListParent.add(Reply);
@@ -173,6 +186,34 @@ public class HomeCtr {
 		modelMap.addAttribute("newBoardReplyList",newBoardReplyList);
 		
 		return "home/HomePost";
+	}
+	
+	
+	// Home 글 수정
+	@RequestMapping(value = "Edit")
+	public String ForumEdit(HttpServletRequest req, HomeVo HomeVo, ModelMap modelMap) {
+		System.out.println("111111111111111111111111"+HomeVo.getSeq());
+		
+		HomeVo HomeDetail = HomeSvc.GetViewDetail(HomeVo); // 게시글 내용 보기
+		modelMap.addAttribute("HomeDetail", HomeDetail);
+		return "home/HomeEdit";
+	}
+
+	// Home 글 수정 Post
+	@RequestMapping(value = "Edit", method = RequestMethod.POST)
+	public String ForumEditPost(HttpServletRequest req, HomeVo HomeVo, ModelMap modelMap) {
+		System.out.println("222222222222222223"+HomeVo.getSeq());
+		HomeSvc.Edit_Write(HomeVo);
+		return "redirect:/Home";
+	}
+	
+	// Home 글 삭제
+	@RequestMapping(value = "Remove_Post")
+	public String HomeRemove(HttpServletRequest req, HomeVo HomeVo, ModelMap modelMap) {
+
+		HomeSvc.Remove_Post(HomeVo);
+
+		return "redirect:/Home";
 	}
 	
 	/* 댓글 쓰기 POST방식 데이터 받는 컨트롤러 */

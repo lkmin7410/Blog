@@ -53,34 +53,27 @@ border-color:rgb(24, 26, 27);
 	</nav>
 	<!-- Page content-->
 
-	<form action="Write" method="post">
+	<form action="Edit" method="post">
 		<div class="container">
 			<div class="row" style="display: block;">
 				<!-- Post content-->
 				<div class="col-lg-8" style="max-width: 100%;">
 					<!-- Title-->
 					<div class="form-group" style="margin-top: 50px;">
-						<select name="categories" class="form-control">
-						<option>카테고리를 선택해주세요.</option>
-						<c:forEach var="c" items="${Categories}">
-							<option value="${c.categories}">${c.categories}</option>
-						</c:forEach>
-						</select>
-						<br>
-						 <input type="text" name="title" placeholder="제목을 입력해 주세요."
-							class="form-control" style="border-color: rgb(24, 26, 27);" required>
+						<input type="text" name="title" placeholder="제목"
+							class="form-control" required value="${HomeDetail.title}" style="border-color: rgb(24, 26, 27);">
 					</div>
 					<hr />
 					<!-- Post content-->
 					<div class="form-group">
 						<textarea name="content" id="p_content" class="form-control"
-							rows="30"></textarea>
+							rows="30">${HomeDetail.content}</textarea>
+
 					</div>
 					<hr />
 					<input type="hidden" name="writer"
 						value="${sessionScope.session_id}">
-					<input type="hidden" name="categories"
-						value="${param.categories}">	
+						 <input type="hidden" name="seq" value="${HomeDetail.seq}">
 					<button class="btn btn-primary" type="submit">Submit</button>
 				</div>
 			</div>
@@ -88,52 +81,41 @@ border-color:rgb(24, 26, 27);
 	</form>
 
 	<script type="text/javascript">
-		$(function() {
-			CKEDITOR.replace('p_content', {
-				filebrowserUploadUrl : 'fileUpload'
-			});
-		});
-	</script>
+							$(function() {
+								CKEDITOR.replace('p_content', {
+									filebrowserUploadUrl : 'fileUpload'
+								});
+							});
+						</script>
 	<script type="text/javascript">
-		CKEDITOR.config.disallowedContent = 'img{width,height}';
-		CKEDITOR
-				.on(
-						'instanceReady',
-						function(ev) {
-							ev.editor.dataProcessor.htmlFilter
-									.addRules({
-										elements : {
-											$ : function(element) {
-												if (element.name == 'img') {
-													if (element.attributes.style) {
-														element.attributes.style = element.attributes.style
-																.replace(
-																		/(height|width)[^;]*;/gi,
-																		'');
-													}
-												}
-												if (!element.attributes.style)
-													delete element.attributes.style;
-												return element;
-											}
+							CKEDITOR.config.disallowedContent = 'img{width,height}';
+							CKEDITOR.on('instanceReady',function(ev) {
+										ev.editor.dataProcessor.htmlFilter.addRules({
+										elements : {$ : function(element) {
+										if (element.name == 'img') {
+										if (element.attributes.style) {
+										element.attributes.style = element.attributes.style
+										.replace(/(height|width)[^;]*;/gi,'');}}
+										if (!element.attributes.style)
+										delete element.attributes.style;
+										return element;}
 										}
-									});
-						});
-	</script>
+										});
+										});
+						</script>
 	<script type="text/javascript">
-		CKEDITOR.on('dialogDefinition', function(ev) {
-			var dialogName = ev.data.name;
-			var dialog = ev.data.definition.dialog;
-			var dialogDefinition = ev.data.definition;
-			if (dialogName == 'image') {
-				dialog.on('show', function(obj) {
-					this.selectPage('Upload'); //업로드텝으로 시작
-				});
-				dialogDefinition.removeContents('advanced'); // 자세히탭 제거
-				dialogDefinition.removeContents('Link'); // 링크탭 제거
-			}
-		});
-	</script>
+							CKEDITOR.on('dialogDefinition',function(ev) {
+							var dialogName = ev.data.name;
+							var dialog = ev.data.definition.dialog;
+							var dialogDefinition = ev.data.definition;
+							if (dialogName == 'image') {dialog.on('show',function(obj) {
+							this.selectPage('Upload'); //업로드텝으로 시작
+							});
+							dialogDefinition.removeContents('advanced'); // 자세히탭 제거
+							dialogDefinition.removeContents('Link'); // 링크탭 제거
+							}
+							});
+						</script>
 	<!-- Bootstrap core JS-->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script

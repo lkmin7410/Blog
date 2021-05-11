@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 public class HomeSearchVO {
 
 private	String searchType = "title";			//제목
-private String searchKeyword = ""; 					//검색어
+private String searchKeyword = ""; 				//검색어
 private	Integer displayRowCount = 3; 			//화면, 10개씩 뿌림
 private Integer rowStart; 						//시작 행 번호
 private	Integer rowEnd;							//종료 행 번호
@@ -16,17 +16,14 @@ private	Integer page;							//현재 페이지
 private	Integer pageStart;						//시작 페이지 번호
 private	Integer pageEnd;						//마지막 페이지 번호
 
-private String globalKeyword;
+private String categories = "";
 
-public String getGlobalKeyword() {
-	return globalKeyword;
+public String getCategories() {
+	return categories;
 }
-
-public void setGlobalKeyword(String globalKeyword) {
-	this.globalKeyword = globalKeyword;
+public void setCategories(String categories) {
+	this.categories = categories;
 }
-
-
 
 public void pageCalculate(Integer total) {
 	

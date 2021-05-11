@@ -17,6 +17,8 @@
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="css/styles.css" rel="stylesheet" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 
 <style type="text/css">
 .card-title, .card-text {
@@ -25,9 +27,13 @@
 	text-overflow: ellipsis;
 }
 
-.card-body img{
-max-width: 100%;
-  height: auto;
+.card-body img {
+	max-width: 100%;
+	height: auto;
+}
+
+.newcategories {
+	display: none;
 }
 </style>
 
@@ -36,7 +42,15 @@ max-width: 100%;
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="Home">Start Bootstrap</a>
+			<c:if test="${empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">블로그</a>
+			</c:if>
+
+			<c:if test="${not empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">${sessionScope.session_id}님의
+					블로그</a>
+			</c:if>
+
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -66,11 +80,17 @@ max-width: 100%;
 			<!-- Blog entries-->
 			<div class="col-md-8">
 				<h1 class="my-4">
-					Page Heading <small>Secondary Text</small>
+					Categories : 
+					<c:if test="${empty so.categories}"> 
+					<small>전체 보기</small>
+					</c:if>
+					
+					<c:if test="${not empty so.categories}"> 
+					<small>${so.categories}</small>
+					</c:if>
 				</h1>
 				<!-- Blog post-->
 				<c:forEach var="i" items="${PostList}">
-
 					<div class="card mb-4">
 						<!-- <img class="card-img-top"
 							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
@@ -80,11 +100,8 @@ max-width: 100%;
 							<a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read
 								More →</a>
 						</div>
-						<div class="card-footer text-muted">
-							${i.regdate} <a href="#!">Start Bootstrap</a>
-						</div>
+						<div class="card-footer text-muted">${i.regdate}</div>
 					</div>
-
 				</c:forEach>
 
 				<!-- 페이징 설정을 위한 Startnum, Lastnum, Page 변수 -->
@@ -106,9 +123,10 @@ max-width: 100%;
 					<!-- 페이징 -->
 					<c:forEach var="i" begin="0" end="4">
 						<c:if test="${(startNum+i) <= lastNum}">
-							<li><a class="page-link" href="Home?page=${startNum+i}&searchKeyword=${so.searchKeyword}">${startNum+i}</a></li>
-						</c:if>
+							<li><a class="page-link"
+								href="Home?page=${startNum+i}&searchKeyword=${so.searchKeyword}&categories=${so.categories}">${startNum+i}</a></li>
 
+						</c:if>
 					</c:forEach>
 					<c:if test="${startNum+5 <= lastNum}">
 						<li class="page-item disabled"><a class="page-link"
@@ -123,21 +141,43 @@ max-width: 100%;
 
 			<!-- Side widgets-->
 			<div class="col-md-4">
-			
-			<form action="Home">
-				<!-- Search widget-->
-				<div class="card my-4">
-					<h5 class="card-header">Search</h5>
-					<div class="card-body">
-						<div class="input-group">
-							<input class="form-control" type="text"
-								placeholder="Search for..." name="searchKeyword" /> <span class="input-group-append"><button
-									class="btn btn-secondary" type="submit">Go!</button></span>
+				<form action="Home">
+					<!-- Search widget-->
+					<div class="card my-4">
+						<h5 class="card-header">Search</h5>
+						<div class="card-body">
+							<div class="input-group">
+								<input class="form-control" type="text"
+									placeholder="Search for..." name="searchKeyword" /> <span
+									class="input-group-append"><button
+										class="btn btn-secondary" type="submit">Go!</button></span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</form>
-				
+				</form>
+
+				<c:if test="${empty sessionScope.session_id}">
+					<form action="Login" method="post">
+						<!-- Search widget-->
+						<div class="card my-4">
+							<h5 class="card-header">Login</h5>
+							<div class="card-body">
+								<div class="input-group">
+									<input class="form-control" type="text" placeholder="ID"
+										name="userid" />
+								</div>
+								<br>
+								<div class="input-group">
+									<input class="form-control" type="password"
+										placeholder="PASSWORD" name="userpw" /> <span
+										class="input-group-append"><button
+											class="btn btn-secondary" type="submit">Go!</button></span>
+								</div>
+							</div>
+						</div>
+					</form>
+				</c:if>
+
 				<!-- 프로필? -->
 				<c:if test="${not empty sessionScope.session_id}">
 					<div class="card my-4">
@@ -152,42 +192,67 @@ max-width: 100%;
 								<div class="col-lg-6">
 									<ul class="list-unstyled mb-0">
 										<li><a href="Write">글 쓰기</a></li>
-										<li><a href="#!">CSS</a></li>
-										<li><a href="#!">로그아웃</a></li>
+										<li><a href="Logout">로그아웃</a></li>
 									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
 				</c:if>
+
 				<!-- Categories widget-->
 				<div class="card my-4">
 					<h5 class="card-header">Categories</h5>
 					<div class="card-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<ul class="list-unstyled mb-0">
-									<li><a href="#!">Web Design</a></li>
-									<li><a href="#!">HTML</a></li>
-									<li><a href="#!">Freebies</a></li>
+						<div>
+							<div>
+								<ul class="mb-0">
+									<li><a href="Home" class="recent">전체 보기</a></li>
+									<c:forEach var="Categories" items="${Categories}">
+										<li><a href="Home?categories=${Categories.categories}" class="recent">${Categories.categories}</a></li>
+									</c:forEach>
 								</ul>
-							</div>
-							<div class="col-lg-6">
+								<hr>
 								<ul class="list-unstyled mb-0">
-									<li><a href="#!">JavaScript</a></li>
-									<li><a href="#!">CSS</a></li>
-									<li><a href="#!">Tutorials</a></li>
+									<li style="float: right;"><button
+											class="btn btn-secondary categories ">New!</button></li>
 								</ul>
+								<div class="newcategories">
+									<form action="Categories" method="post">
+										<input class="form-control" type="text"
+											placeholder="New Categories..." name="categories"> <span
+											class="input-group-append"><button
+												class="btn btn-secondary" type="submit">생성</button></span>
+									</form>
+								</div>
+								<script type="text/javascript">
+									$(function() {
+										$('.categories').click(function() {
+											$('.newcategories').toggle();
+										});
+									});
+								</script>
+
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<!-- Side widget-->
 				<div class="card my-4">
-					<h5 class="card-header">Side Widget</h5>
-					<div class="card-body">You can put anything you want inside
-						of these side widgets. They are easy to use, and feature the new
-						Bootstrap 4 card containers!</div>
+					<h5 class="card-header">Recent Comments</h5>
+					<div class="card-body">
+						<div>
+							<div>
+								<!-- <ul class="list-unstyled mb-0"> -->
+								<ul class="mb-0">
+									<c:forEach var="r" items="${CommentList}" begin="0" end="4">
+										<li><a href="HomePost?seq=${r.seq}" class="recent">${r.title}</a></li>
+									</c:forEach>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

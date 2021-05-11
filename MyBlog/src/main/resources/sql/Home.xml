@@ -7,28 +7,61 @@
 	<select id="selectHomeCount" resultType="Integer"
 		parameterType="com.blog.home.HomeSearchVO">
 		select count(c.title) from (select distinct *
-		from post where title
-		like '%${searchKeyword}%') as c
+		from post
+		where title
+		like '%${searchKeyword}%' and categories like '%${categories}%') as c
 	</select>
 
 	<!-- Home 글 목록 가져오기 -->
-	<select id="GetPostList"
-		resultType="com.blog.home.HomeVo"
+	<select id="GetPostList" resultType="com.blog.home.HomeVo"
 		parameterType="com.blog.home.HomeSearchVO">
 		select * from (select @rownum:=@rownum+1 as rownum, n.*
 		from
-		(select * from post where title like '%${searchKeyword}%')n ,
+		(select * from post where title like '%${searchKeyword}%' and categories like '%${categories}%')n ,
 		(select @rownum:=0)as r) s
 		where rownum between
-		${rowEnd} and ${rowStart} order by rownum desc
+		${rowEnd} and
+		${rowStart} order by rownum desc
 	</select>
+
+	<!-- Home 최신 댓글 목록 가져오기 -->
+	<select id="GetRecentComments" resultType="com.blog.home.HomeVo">
+		select distinct
+		p.title,p.seq, c.post_seq from post as p, postcomment as c
+		where p.seq
+		= c.post_seq order by seq desc
+	</select>
+
+	<!-- Home 카테고리 목록 가져오기 -->
+	<select id="GetCategories" resultType="com.blog.home.HomeVo">
+		select * from categories
+	</select>
+
+	<!-- Home 카테고리 생성 -->
+	<insert id="SetCategories" parameterType="com.blog.home.HomeVo">
+		insert into
+		categories(categories)
+		values('${categories}')
+	</insert>
 
 	<!-- Home 글 쓰기 -->
 	<insert id="SetWrite" parameterType="com.blog.home.HomeVo">
 		insert into
-		post(title,content,writer)
-		values('${title}','${content}','${writer}')
+		post(categories,title,content,writer)
+		values('${categories}','${title}','${content}','${writer}')
 	</insert>
+
+	<!-- Home 게시글 수정 -->
+	<update id="Edit_Write" parameterType="com.blog.home.HomeVo">
+		UPDATE post SET
+		title='${title}', content='${content}' WHERE seq=${seq};
+	</update>
+
+	<!-- Forum 게시글 삭제 -->
+	<delete id="Remove_Post" parameterType="com.blog.home.HomeVo">
+		delete from post WHERE
+		seq=${seq}
+	</delete>
 
 	<!-- POST 댓글 쓰기 -->
 	<insert id="SetPostComment"
@@ -59,7 +92,8 @@
 	</select>
 
 	<!-- Post 대댓글 목록 가져오기 -->
-	<select id="GetReplyList" parameterType="com.blog.home.HomeCommentVo"
+	<select id="GetReplyList"
+		parameterType="com.blog.home.HomeCommentVo"
 		resultType="com.blog.home.HomeCommentVo">
 		select * from commentreply where reply_seq =${seq} order by
 		seq desc

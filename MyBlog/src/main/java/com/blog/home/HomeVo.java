@@ -7,12 +7,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class HomeVo {
 	
+	private int seq;
 	private String title;
 	private String content;
 	private String writer;
 	private Date regdate;
-	private int seq;
 	
+	private String categories ="";
+	
+	public String getCategories() {
+		return categories;
+	}
+	public void setCategories(String categories) {
+		this.categories = categories;
+	}
 	public int getSeq() {
 		return seq;
 	}

@@ -25,6 +25,10 @@ p>img{
  max-width: 100%;
   height: auto;
 }
+
+.hide{
+display: none;
+}
 </style>
 
 </head>
@@ -63,7 +67,11 @@ p>img{
 				</p>
 				<hr />
 				<!-- Date and time-->
-				<p>${HomeVo.regdate}</p>
+				<p style="display: inline;">${HomeVo.regdate}</p>
+				<c:if test="${sessionScope.session_id == HomeVo.writer}">
+				<button class="btn btn-primary" type="button" onclick="location.href='Remove_Post?seq=${HomeVo.seq}'" style="float: right; margin-left: 5px;">삭제</button>
+				<button class="btn btn-primary" type="button" onclick="location.href='Edit?seq=${HomeVo.seq}'" style="float: right;">수정</button>
+				</c:if>
 				<hr />
 				<!-- Preview image-->
 				<!-- <img class="img-fluid rounded"
@@ -95,7 +103,7 @@ p>img{
 						<div class="media-body">
 							<h5 class="mt-0">Commenter Name :: ${co.userid}</h5>
 							${co.comment} <br> ${co.regdate} <br>
-							<button class="reply_button${status.count}" >답글</button>
+							<button class="btn btn-primary reply_button${status.count}" >Reply</button>
 							
 							<!-- 대댓글 리스트 -->
 							<c:forEach var="cr" items="${newBoardReplyList}">
@@ -129,26 +137,11 @@ p>img{
 							</div>
 							
 							<script type="text/javascript">
-							
 							$(function(){
 								$('.reply_button${status.count}').click(function(){
 									$('.reply${status.count}').toggle();
 								});
 							});
-							
-							//스크립트를 이용한 토글
-/* 							const reply = document.querySelector('.reply');
-							const reply_button = document.querySelector('.reply_button');
-							
-							let hide = true;
-							reply_button.addEventListener('click',function(){
-								hide = !hide;
-								if(hide){
-									reply.classList.add('hide');
-								}else {
-									reply.classList.remove('hide');									
-								}
-							}); */
                             </script>
 						</div>
 					</div>
