@@ -58,7 +58,6 @@ public class HomeCtr {
 		
 		return "redirect:/Home";
 	}
-	
 
 	/* 글 쓰기 페이지 */
 	@RequestMapping(value = "Write")
@@ -74,7 +73,6 @@ public class HomeCtr {
 	/* 글 쓰기 POST방식 데이터 받는 컨트롤러 */
 	@RequestMapping(value = "Write", method = RequestMethod.POST)
 	public String HomeWritePost(HttpServletRequest request, ModelMap modelMap, HomeVo HomeVo) {
-		System.out.println("111111111111111111111"+HomeVo.getCategories());
 
 		HomeSvc.SetWrite(HomeVo);
 
@@ -142,6 +140,7 @@ public class HomeCtr {
 	/* 글 보기 디테일 */
 	@RequestMapping(value = "HomePost")
 	public String HomePostView(HttpServletRequest request, ModelMap modelMap, HomeVo HomeVo) {
+		
 		/* 글 디테일 보기 */
 		HomeVo = HomeSvc.GetViewDetail(HomeVo);
 		/* 부모 댓글 리스트 가져오기 */
@@ -174,16 +173,15 @@ public class HomeCtr {
                 if(boardReplyParent.getSeq()==boardReplyChild.getReply_seq()){
                     newBoardReplyList.add(boardReplyChild);
                 }
- 
             }
- 
         }
-        for(HomeCommentVo g : newBoardReplyList) {
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+g.getComment());
-        }
+        List<?>Categories = HomeSvc.GetCategories(); //카테고리 리스트 가져오기
+        
+
 		modelMap.addAttribute("HomeVo", HomeVo);
 		modelMap.addAttribute("CommentList", CommentList);
 		modelMap.addAttribute("newBoardReplyList",newBoardReplyList);
+		modelMap.addAttribute("Categories",Categories);
 		
 		return "home/HomePost";
 	}

@@ -15,5 +15,10 @@
 		user(userid,userpw,username,useremail)
 		values(#{userid},#{userpw},#{username},#{useremail})
 	</insert>
+	
+		<!-- 회원가입 아이디 중복확인 -->
+	<select id="idCheck" parameterType="String" resultType="Integer">
+		select count(userid) from user where userid = #{userid}
+	</select>
 
 </mapper>

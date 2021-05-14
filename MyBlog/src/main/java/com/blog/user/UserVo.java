@@ -9,7 +9,23 @@ private	String userid;
 private	String userpw;
 private	String username;
 private	String useremail;
+private String rdmNum;
+private String checkNum;
 
+
+
+public String getRdmNum() {
+	return rdmNum;
+}
+public void setRdmNum(String rdmNum) {
+	this.rdmNum = rdmNum;
+}
+public String getCheckNum() {
+	return checkNum;
+}
+public void setCheckNum(String checkNum) {
+	this.checkNum = checkNum;
+}
 public String getUserid() {
 	return userid;
 }

@@ -15,6 +15,11 @@ public class UserSvc {
 
 		sqlSession.insert("SetSignUp",param);
 	}
+	
+	// 아이디 중복 체크
+	public Integer idCheck(String param) {
+		return sqlSession.selectOne("idCheck", param);
+	}
 
 	//로그인
 	public UserVo SetLogIn(UserVo param) {

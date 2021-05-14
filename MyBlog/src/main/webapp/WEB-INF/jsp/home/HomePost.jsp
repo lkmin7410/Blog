@@ -21,13 +21,13 @@
 	src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 
 <style>
-p>img{
- max-width: 100%;
-  height: auto;
+p>img {
+	max-width: 100%;
+	height: auto;
 }
 
-.hide{
-display: none;
+.hide {
+	display: none;
 }
 </style>
 
@@ -69,8 +69,12 @@ display: none;
 				<!-- Date and time-->
 				<p style="display: inline;">${HomeVo.regdate}</p>
 				<c:if test="${sessionScope.session_id == HomeVo.writer}">
-				<button class="btn btn-primary" type="button" onclick="location.href='Remove_Post?seq=${HomeVo.seq}'" style="float: right; margin-left: 5px;">삭제</button>
-				<button class="btn btn-primary" type="button" onclick="location.href='Edit?seq=${HomeVo.seq}'" style="float: right;">수정</button>
+					<button class="btn btn-primary" type="button"
+						onclick="location.href='Remove_Post?seq=${HomeVo.seq}'"
+						style="float: right; margin-left: 5px;">삭제</button>
+					<button class="btn btn-primary" type="button"
+						onclick="location.href='Edit?seq=${HomeVo.seq}'"
+						style="float: right;">수정</button>
 				</c:if>
 				<hr />
 				<!-- Preview image-->
@@ -96,31 +100,31 @@ display: none;
 					</div>
 				</div>
 				<!-- Single comment-->
-				<c:forEach var="co" items="${CommentList}"  varStatus="status">
+				<c:forEach var="co" items="${CommentList}" varStatus="status">
 					<div class="media mb-4">
 						<img class="d-flex mr-3 rounded-circle"
 							src="https://via.placeholder.com/50x50" alt="..." />
 						<div class="media-body">
 							<h5 class="mt-0">Commenter Name :: ${co.userid}</h5>
 							${co.comment} <br> ${co.regdate} <br>
-							<button class="btn btn-primary reply_button${status.count}" >Reply</button>
-							
+							<button class="btn btn-primary reply_button${status.count}">Reply</button>
+
 							<!-- 대댓글 리스트 -->
 							<c:forEach var="cr" items="${newBoardReplyList}">
-							<c:if test="${co.seq == cr.reply_seq}">
-							<div class="media mt-4">
-							<img class="d-flex mr-3 rounded-circle"
-								src="https://via.placeholder.com/50x50" alt="..." />
-							<div class="media-body">
-								<h5 class="mt-0">Commenter Name :: ${cr.userid}</h5>
-								${cr.comment} <br> ${cr.regdate}
-							</div>
-						</div>
-						</c:if>
-						</c:forEach>
-						
+								<c:if test="${co.seq == cr.reply_seq}">
+									<div class="media mt-4">
+										<img class="d-flex mr-3 rounded-circle"
+											src="https://via.placeholder.com/50x50" alt="..." />
+										<div class="media-body">
+											<h5 class="mt-0">Commenter Name :: ${cr.userid}</h5>
+											${cr.comment} <br> ${cr.regdate}
+										</div>
+									</div>
+								</c:if>
+							</c:forEach>
+
 							<!-- 대댓글 입력 창 -->
-							<div class="card my-4 reply${status.count} hide" >
+							<div class="card my-4 reply${status.count} hide">
 								<h5 class="card-header">Leave a Comment:</h5>
 								<div class="card-body">
 									<form action="Commentreply" method="post">
@@ -129,24 +133,26 @@ display: none;
 										</div>
 										<input type="hidden" name="userid"
 											value="${sessionScope.session_id}"> <input
-											type="hidden" name="reply_seq" value="${co.seq}">
-											<input type="hidden" name="post_seq" value="${HomeVo.seq}">
+											type="hidden" name="reply_seq" value="${co.seq}"> <input
+											type="hidden" name="post_seq" value="${HomeVo.seq}">
 										<button class="btn btn-primary" type="submit">Submit</button>
 									</form>
 								</div>
 							</div>
-							
+
 							<script type="text/javascript">
-							$(function(){
-								$('.reply_button${status.count}').click(function(){
-									$('.reply${status.count}').toggle();
+								$(function() {
+									$('.reply_button${status.count}').click(
+											function() {
+												$('.reply${status.count}')
+														.toggle();
+											});
 								});
-							});
-                            </script>
+							</script>
 						</div>
 					</div>
 				</c:forEach>
-				
+
 			</div>
 			<!-- Sidebar widgets column-->
 			<div class="col-md-4">
@@ -165,20 +171,24 @@ display: none;
 				<div class="card my-4">
 					<h5 class="card-header">Categories</h5>
 					<div class="card-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<ul class="list-unstyled mb-0">
-									<li><a href="#!">Web Design</a></li>
-									<li><a href="#!">HTML</a></li>
-									<li><a href="#!">Freebies</a></li>
+						<div>
+							<div>
+								<ul class="mb-0">
+									<li><a href="Home" class="recent">전체 보기</a></li>
+									<c:forEach var="Categories" items="${Categories}">
+										<li><a href="Home?categories=${Categories.categories}"
+											class="recent">${Categories.categories}</a></li>
+									</c:forEach>
 								</ul>
-							</div>
-							<div class="col-lg-6">
-								<ul class="list-unstyled mb-0">
-									<li><a href="#!">JavaScript</a></li>
-									<li><a href="#!">CSS</a></li>
-									<li><a href="#!">Tutorials</a></li>
-								</ul>
+								
+								<script type="text/javascript">
+									$(function() {
+										$('.categories').click(function() {
+											$('.newcategories').toggle();
+										});
+									});
+								</script>
+
 							</div>
 						</div>
 					</div>

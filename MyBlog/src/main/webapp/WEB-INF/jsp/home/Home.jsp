@@ -61,13 +61,11 @@
 					<li class="nav-item active"><a class="nav-link" href="#!">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
-					<c:if test="${not empty sessionScope.session_id}">
+ 					<c:if test="${not empty sessionScope.session_id}">
 						<li class="nav-item"><a class="nav-link" href="Login">로그아웃</a></li>
-
 					</c:if>
 
 					<c:if test="${empty sessionScope.session_id}">
-						<li class="nav-item"><a class="nav-link" href="Login">로그인</a></li>
 						<li class="nav-item"><a class="nav-link" href="SignUp">회원가입</a></li>
 					</c:if>
 				</ul>
@@ -212,6 +210,7 @@
 										<li><a href="Home?categories=${Categories.categories}" class="recent">${Categories.categories}</a></li>
 									</c:forEach>
 								</ul>
+								<c:if test="${not empty sessionScope.session_id}">
 								<hr>
 								<ul class="list-unstyled mb-0">
 									<li style="float: right;"><button
@@ -225,6 +224,7 @@
 												class="btn btn-secondary" type="submit">생성</button></span>
 									</form>
 								</div>
+								</c:if>
 								<script type="text/javascript">
 									$(function() {
 										$('.categories').click(function() {

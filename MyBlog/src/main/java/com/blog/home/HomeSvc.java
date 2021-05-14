@@ -71,16 +71,19 @@ public class HomeSvc {
 		return sqlSession.selectList("GetReplyList",param);
 	}
 
+	//최근 댓글 목록 가져오기
 	public List<HomeVo> GetRecentComments() {
 		
 		return sqlSession.selectList("GetRecentComments");
 	}
-
+	
+	//카테고리 생성 하기
 	public void SetCategories(String param) {
 		
 		sqlSession.insert("SetCategories",param);
 	}
-
+	
+	//카테고리 목록 가져오기
 	public List<?> GetCategories() {
 		
 		return sqlSession.selectList("GetCategories");
