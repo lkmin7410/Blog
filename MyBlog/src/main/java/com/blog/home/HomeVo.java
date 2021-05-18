@@ -8,13 +8,27 @@ import org.springframework.stereotype.Repository;
 public class HomeVo {
 	
 	private int seq;
+	private String categories ="";
+	private String public_setting;
+	private String reply_setting;
 	private String title;
 	private String content;
 	private String writer;
 	private Date regdate;
 	
-	private String categories ="";
 	
+	public String getReply_setting() {
+		return reply_setting;
+	}
+	public void setReply_setting(String reply_setting) {
+		this.reply_setting = reply_setting;
+	}
+	public String getPublic_setting() {
+		return public_setting;
+	}
+	public void setPublic_setting(String public_setting) {
+		this.public_setting = public_setting;
+	}
 	public String getCategories() {
 		return categories;
 	}

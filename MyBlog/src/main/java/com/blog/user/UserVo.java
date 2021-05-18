@@ -8,12 +8,25 @@ public class UserVo {
 private	String userid;
 private	String userpw;
 private	String username;
+private String usernickname;
+private String userblogname;
 private	String useremail;
 private String rdmNum;
 private String checkNum;
 
 
-
+public String getUserblogname() {
+	return userblogname;
+}
+public void setUserblogname(String userblogname) {
+	this.userblogname = userblogname;
+}
+public String getUsernickname() {
+	return usernickname;
+}
+public void setUsernickname(String usernickname) {
+	this.usernickname = usernickname;
+}
 public String getRdmNum() {
 	return rdmNum;
 }

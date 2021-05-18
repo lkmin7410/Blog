@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blog.user.UserVo;
+
 @Service
 public class HomeSvc {
 
@@ -23,6 +25,12 @@ public class HomeSvc {
 		
 		return sqlSession.selectList("GetPostList",param);
 	}
+	
+	//글 목록 가져오기
+		public List<?> GetMYPostList(HomeSearchVO param){
+			
+			return sqlSession.selectList("GetMYPostList",param);
+		}
 	
 	//글 쓰기
 	public void SetWrite(HomeVo param) {
@@ -58,6 +66,12 @@ public class HomeSvc {
 
 		sqlSession.selectOne("Remove_Post", param);
 	}
+	//일괄 삭제
+		public void All_Remove(String param) {
+
+			sqlSession.selectOne("All_Remove", param);
+		}
+	
 	
 	//댓글 목록 가져오기
 	public List<HomeCommentVo> GetCommentList(HomeVo param) {
@@ -89,7 +103,11 @@ public class HomeSvc {
 		return sqlSession.selectList("GetCategories");
 	}
 	
+	//내 정보 가져오기
+	public UserVo GetMyInfo(String param) {
 
+		return sqlSession.selectOne("GetMyInfo", param);
+	}
 
 	
 }

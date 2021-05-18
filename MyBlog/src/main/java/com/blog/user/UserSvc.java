@@ -26,4 +26,10 @@ public class UserSvc {
 		
 		return sqlSession.selectOne("SetLogIn", param);
 	}
+	
+	//내 정보 수정
+		public void SetMyInfo(UserVo param) {
+
+			sqlSession.insert("SetMyInfo",param);
+		}
 }

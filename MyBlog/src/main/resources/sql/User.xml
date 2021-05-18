@@ -6,19 +6,28 @@
 	<!-- 로그인 -->
 	<select id="SetLogIn" resultType="com.blog.user.UserVo"
 		parameterType="com.blog.user.UserVo">
-		select * from user where userid = #{userid} and userpw = #{userpw}
+		select * from user where userid = #{userid} and userpw =
+		#{userpw}
 	</select>
 
 	<!-- 회원가입 -->
 	<insert id="SetSignUp" parameterType="com.blog.user.UserVo">
 		insert into
-		user(userid,userpw,username,useremail)
-		values(#{userid},#{userpw},#{username},#{useremail})
+		user(userid,userpw,username,usernickname,userblogname,useremail)
+		values(#{userid},#{userpw},#{username},#{usernickname},#{userid},#{useremail})
 	</insert>
-	
-		<!-- 회원가입 아이디 중복확인 -->
+
+	<!-- 회원가입 아이디 중복확인 -->
 	<select id="idCheck" parameterType="String" resultType="Integer">
-		select count(userid) from user where userid = #{userid}
+		select
+		count(userid) from user where userid = #{userid}
 	</select>
+
+	<!-- 내 정보 수정 -->
+	<update id="SetMyInfo" parameterType="com.blog.user.UserVo">
+		UPDATE user
+		SET usernickname = #{usernickname}, userblogname = #{userblogname}
+		WHERE userid = #{userid};
+	</update>
 
 </mapper>

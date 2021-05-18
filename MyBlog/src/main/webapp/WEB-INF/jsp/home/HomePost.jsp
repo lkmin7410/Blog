@@ -84,6 +84,7 @@ p>img {
 				<!-- Post content-->
 				<p class="lead">${HomeVo.content}</p>
 				<hr />
+				<c:if test="${HomeVo.reply_setting == 'Y'}">
 				<!-- Comments form-->
 				<div class="card my-4">
 					<h5 class="card-header">Leave a Comment:</h5>
@@ -99,6 +100,14 @@ p>img {
 						</form>
 					</div>
 				</div>
+				</c:if>
+				<c:if test="${HomeVo.reply_setting == 'N'}">
+						<div class="card my-4">
+					<h5 class="card-header" style="text-align: center;">댓글을 남길 수 없는 게시글입니다.</h5>
+					
+				</div>
+				</c:if>
+				
 				<!-- Single comment-->
 				<c:forEach var="co" items="${CommentList}" varStatus="status">
 					<div class="media mb-4">
@@ -152,7 +161,6 @@ p>img {
 						</div>
 					</div>
 				</c:forEach>
-
 			</div>
 			<!-- Sidebar widgets column-->
 			<div class="col-md-4">

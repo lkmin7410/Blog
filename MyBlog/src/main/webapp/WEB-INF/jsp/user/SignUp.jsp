@@ -19,8 +19,6 @@
 <title>Insert title here</title>
 
 <style type="text/css">
-
-
 .divider-text {
 	position: relative;
 	text-align: center;
@@ -78,17 +76,11 @@
 				<p class="divider-text">
 					<span class="bg-light">OR</span>
 				</p>
-				<form class="form" action="SignUp" method="post">
-					<div class="form-group input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"> <i class="fa fa-user"></i>
-							</span>
-						</div>
-						<input name="username" class="form-control"
-							placeholder="Full name" type="text" value="${UserVo.username}"
-							required>
-					</div>
+				<form class="form" action="SignUp" method="post" name="signform">
+
+
 					<!-- form-group// -->
+					<!-- 아이디 -->
 					<div class="form-group input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"> <i class="fa fa-envelope"></i>
@@ -99,8 +91,55 @@
 							value="<c:out value="${userid}"/>" required>
 					</div>
 					<div id="id_check"></div>
+					<!-- 비밀번호 -->
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fa fa-lock"></i>
+							</span>
+						</div>
+						<input class="form-control pw" placeholder="Create password"
+							type="password" name="userpw" id="password_1"
+							value="${UserVo.userpw}" required>
+					</div>
 					<!-- form-group// -->
+					<!-- 비밀번호 체크 -->
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fa fa-lock"></i>
+							</span>
+						</div>
+						<input class="form-control pw" placeholder="Repeat password"
+							type="password" id="password_2" value="${UserVo.userpw}" required>
+					</div>
+					<span id="alert-success" style="display: none; color: green;">비밀번호가
+						일치합니다.</span> <span id="alert-danger"
+						style="display: none; color: #d92742;">비밀번호가 일치하지 않습니다.</span>
 
+					<!-- 이름 -->
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fa fa-user"></i>
+							</span>
+						</div>
+						<input name="username" class="form-control"
+							placeholder="Full name" type="text"
+							onkeydown="if(event.keyCode==13) signform.usernickname.focus();"
+							value="${UserVo.username}" required>
+					</div>
+					
+					<!-- 닉네임 -->
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"> <i class="fa fa-user"></i>
+							</span>
+						</div>
+						<input name="usernickname" class="form-control"
+							placeholder="Nick name" type="text"
+							onkeydown="if(event.keyCode==13) signform.useremail.focus();"
+							value="${UserVo.usernickname}" required>
+					</div>
+					<!-- form-group// -->
+					<!-- 이메일 -->
 					<div class="form-group input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"> <i class="fa fa-envelope"></i>
@@ -112,6 +151,7 @@
 							type="button" value="전송" class="btn btn-primary"
 							onclick="submitNum()">
 					</div>
+					<!-- 인증번호 입력 칸 -->
 					<div class="form-group input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"> <i class="fa fa-envelope"></i>
@@ -149,31 +189,9 @@
 		</select> 
 	</div> <!-- form-group end.// -->
 
-					<div class="form-group input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"> <i class="fa fa-lock"></i>
-							</span>
-						</div>
-						<input class="form-control pw" placeholder="Create password"
-							type="password" name="userpw" id="password_1"
-							value="${UserVo.userpw}" required>
-					</div>
-					<!-- form-group// -->
-					<div class="form-group input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"> <i class="fa fa-lock"></i>
-							</span>
-						</div>
-						<input class="form-control pw" placeholder="Repeat password"
-							type="password" id="password_2">
-					</div>
-					<span id="alert-success" style="display: none; color:green;">비밀번호가 일치합니다.</span>
-					<span id="alert-danger"
-						style="display: none; color: #d92742;">비밀번호가
-						일치하지 않습니다.</span>
+
 					<!-- form-group// -->
 					<div class="form-group">
-
 						<c:choose>
 							<c:when test="${msg != 1}">
 								<button type="button" class="btn btn-primary btn-block"
@@ -265,7 +283,7 @@
 		</c:when>
 	</c:choose>
 
-<script>
+	<script>
     $('.pw').focusout(function () {
         var pwd1 = $("#password_1").val();
         var pwd2 = $("#password_2").val();

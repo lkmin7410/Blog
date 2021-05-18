@@ -9,15 +9,29 @@
 		select count(c.title) from (select distinct *
 		from post
 		where title
-		like '%${searchKeyword}%' and categories like '%${categories}%') as c
+		like '%${searchKeyword}%' and categories like '%${categories}%' and public_setting like '%${public_setting}%') as c
 	</select>
 
 	<!-- Home 글 목록 가져오기 -->
 	<select id="GetPostList" resultType="com.blog.home.HomeVo"
 		parameterType="com.blog.home.HomeSearchVO">
+		
 		select * from (select @rownum:=@rownum+1 as rownum, n.*
 		from
-		(select * from post where title like '%${searchKeyword}%' and categories like '%${categories}%')n ,
+		(select * from post where title like '%${searchKeyword}%' and categories like '%${categories}%' and public_setting like '%${public_setting}%')n ,
+		(select @rownum:=0)as r) s
+		where rownum between
+		${rowEnd} and
+		${rowStart} order by rownum desc
+
+	</select>
+	
+		<!-- Home 나의 글 목록 가져오기 -->
+	<select id="GetMYPostList" resultType="com.blog.home.HomeVo"
+		parameterType="com.blog.home.HomeSearchVO">
+		select * from (select @rownum:=@rownum+1 as rownum, n.*
+		from
+		(select * from post where title like '%${searchKeyword}%' and categories like '%${categories}%' and public_setting like '%${public_setting}%' and writer = #{userid})n ,
 		(select @rownum:=0)as r) s
 		where rownum between
 		${rowEnd} and
@@ -47,18 +61,24 @@
 	<!-- Home 글 쓰기 -->
 	<insert id="SetWrite" parameterType="com.blog.home.HomeVo">
 		insert into
-		post(categories,title,content,writer)
-		values('${categories}','${title}','${content}','${writer}')
+		post(categories,public_setting,reply_setting,title,content,writer)
+		values('${categories}','${public_setting}','${reply_setting}','${title}','${content}','${writer}')
 	</insert>
 
 	<!-- Home 게시글 수정 -->
 	<update id="Edit_Write" parameterType="com.blog.home.HomeVo">
 		UPDATE post SET
-		title='${title}', content='${content}' WHERE seq=${seq};
+		public_setting='${public_setting}', reply_setting='${reply_setting}', title='${title}', content='${content}' WHERE seq=${seq};
 	</update>
 
 	<!-- Forum 게시글 삭제 -->
 	<delete id="Remove_Post" parameterType="com.blog.home.HomeVo">
+		delete from post WHERE
+		seq=${seq}
+	</delete>
+	
+	<!-- 게시글 일괄삭제 -->
+	<delete id="All_Remove" parameterType="com.blog.home.HomeVo">
 		delete from post WHERE
 		seq=${seq}
 	</delete>
@@ -97,6 +117,12 @@
 		resultType="com.blog.home.HomeCommentVo">
 		select * from commentreply where reply_seq =${seq} order by
 		seq desc
+	</select>
+	
+		<!-- 내 정보 가져오기 -->
+	<select id="GetMyInfo" parameterType="String"
+		resultType="com.blog.user.UserVo">
+		select * from user where userid = #{s_id};
 	</select>
 
 </mapper>

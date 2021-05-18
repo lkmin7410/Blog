@@ -17,7 +17,21 @@ private	Integer pageStart;						//시작 페이지 번호
 private	Integer pageEnd;						//마지막 페이지 번호
 
 private String categories = "";
+private String public_setting = "";
+private String userid;
 
+public String getUserid() {
+	return userid;
+}
+public void setUserid(String userid) {
+	this.userid = userid;
+}
+public String getPublic_setting() {
+	return public_setting;
+}
+public void setPublic_setting(String public_setting) {
+	this.public_setting = public_setting;
+}
 public String getCategories() {
 	return categories;
 }
@@ -26,6 +40,29 @@ public void setCategories(String categories) {
 }
 
 public void pageCalculate(Integer total) {
+	
+	getPage();
+	totRow = total;
+	totPage = (int)(total / displayRowCount); // 전체 페이지 수는 조회된 전체 건수 나누기 10
+	
+	if(total % displayRowCount > 0) { //전체 건수를 10으로 나누어서 0보다 크면 페이지 수를 하나 더 늘린다.
+		totPage++;					  //만약 101건 이 조회 되었다면 totpage 는 10이 나오지만 페이지 수를 하나 더 올림.
+	}
+	pageStart = (page-(page-1)%10);   //만약 페이지가 12이면 (12-(12-1)%10) 항상 1, 11, 21, 식의 숫자가 표시됨
+	pageEnd = pageStart + 9;		  //시작 페이지에서 9 더하면 10개씩 출력
+	if(pageEnd > totPage) {			  
+		pageEnd = totPage;
+	}
+
+	
+	rowStart = total - (page-1)*displayRowCount; // (3-1)*11 
+	rowEnd = rowStart - (displayRowCount -1);	 //마지막 row번호
+
+}
+
+public void publicpageCalculate(Integer total) {
+	
+	this.displayRowCount = 5;
 	
 	getPage();
 	totRow = total;

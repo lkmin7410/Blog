@@ -25,6 +25,17 @@ public class UserCtr {
 
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	
+	/* 내 정보 수정 */
+	@RequestMapping(value = "/MyinfoEdit")
+	public String MyinfoEdit(UserVo UserVo) {
+
+		UserSvc.SetMyInfo(UserVo);
+		
+		return "redirect:/HomeAdmin";
+	}
+	
 
 	/* 로그인 페이지 */
 	@RequestMapping(value = "/Login")

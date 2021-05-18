@@ -79,13 +79,32 @@ border-color:rgb(24, 26, 27);
 					<hr />
 					<input type="hidden" name="writer"
 						value="${sessionScope.session_id}">
-					<input type="hidden" name="categories"
-						value="${param.categories}">	
-					<button class="btn btn-primary" type="submit">Submit</button>
+						
+					<input type="button" class="btn btn-primary save" value="저장">
+					<div class="save_button" style="display: none;">
+						<span>공개 여부</span>
+						<input type="radio" name="public_setting" checked="checked" value="전체공개">전체 공개
+						<input type="radio" name="public_setting" value="비공개">비공개
+						<br>
+						<span>댓글 여부</span>
+						<input type="radio" name="reply_setting" checked="checked" value="Y">허용
+						<input type="radio" name="reply_setting" value="N">불허
+						<br>
+					 <button class="btn btn-primary">저장</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</form>
+
+	<script type="text/javascript">
+	$(function() {
+		$('.save').click(function() {
+			$('.save_button').toggle();
+			$('.save').hide();
+		});
+	});
+	</script>
 
 	<script type="text/javascript">
 		$(function() {
