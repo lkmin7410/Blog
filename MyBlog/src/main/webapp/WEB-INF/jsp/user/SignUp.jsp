@@ -66,7 +66,7 @@
 			<article class="card-body mx-auto" style="max-width: 400px;">
 				<h4 class="card-title mt-3 text-center">Create Account</h4>
 				<p class="text-center">Get started with your free account</p>
-				<p>
+<!-- 				<p>
 					<a href="" class="btn btn-block btn-twitter"> <i
 						class="fab fa-twitter"></i>   Login via Twitter
 					</a> <a href="" class="btn btn-block btn-facebook"> <i
@@ -75,7 +75,7 @@
 				</p>
 				<p class="divider-text">
 					<span class="bg-light">OR</span>
-				</p>
+				</p> -->
 				<form class="form" action="SignUp" method="post" name="signform">
 
 

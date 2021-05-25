@@ -26,7 +26,7 @@
 	<!-- 내 정보 수정 -->
 	<update id="SetMyInfo" parameterType="com.blog.user.UserVo">
 		UPDATE user
-		SET usernickname = #{usernickname}, userblogname = #{userblogname}
+		SET usernickname = #{usernickname}, userblogname = #{userblogname}, userimg = #{userimg}, userIntroduction = #{userIntroduction}
 		WHERE userid = #{userid};
 	</update>
 

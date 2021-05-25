@@ -13,8 +13,22 @@ private String userblogname;
 private	String useremail;
 private String rdmNum;
 private String checkNum;
+private String userimg;
+private String userIntroduction;
 
 
+public String getUserIntroduction() {
+	return userIntroduction;
+}
+public void setUserIntroduction(String userIntroduction) {
+	this.userIntroduction = userIntroduction;
+}
+public String getUserimg() {
+	return userimg;
+}
+public void setUserimg(String userimg) {
+	this.userimg = userimg;
+}
 public String getUserblogname() {
 	return userblogname;
 }

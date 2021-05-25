@@ -1,12 +1,22 @@
 package com.blog.user;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,9 +26,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.blog.home.HomeSearchVO;
+import com.blog.home.HomeSvc;
+import com.google.gson.JsonObject;
 
 @Controller
 public class UserCtr {
+	
+	public static String SAVE_PATH = "D:\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\MyBlog\\upload\\";
 
 	@Autowired
 	private UserSvc UserSvc;
@@ -29,13 +48,99 @@ public class UserCtr {
 	
 	/* 내 정보 수정 */
 	@RequestMapping(value = "/MyinfoEdit")
-	public String MyinfoEdit(UserVo UserVo) {
-
+	public String MyinfoEdit(UserVo UserVo){
+		
 		UserSvc.SetMyInfo(UserVo);
 		
 		return "redirect:/HomeAdmin";
 	}
 	
+	/* 프로필 이미지 업로드 */
+	@RequestMapping(value = "/MyinfoEdit", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView upload(
+			MultipartHttpServletRequest multiFile,HttpServletRequest req,HttpServletResponse resp, ModelAndView mv, HomeSearchVO HomeSearchVO, UserVo UserVo) throws IOException {
+
+//		public ModelAndView upload(
+//	            @RequestParam(value="img_file", required = false) MultipartFile mf,HttpServletRequest req, ModelAndView mv, HomeSearchVO HomeSearchVO, UserVo UserVo) {
+		
+//		String originalFileName = mf.getOriginalFilename();
+//		String safeFile = SAVE_PATH + originalFileName;
+//        String fileUrl = req.getContextPath() + "/upload/" + originalFileName;
+//        
+//        System.out.println("111111111111111111111111111111111111safeFile :: "+safeFile);
+//        System.out.println("111111111111111111111111111111111111originalFileName ::" + originalFileName);
+//        
+//        UserVo.setUserimg(fileUrl);
+//        UserSvc.SetMyInfo(UserVo);
+//        
+//        try {
+//            mf.transferTo(new File(safeFile));
+//
+//           } catch (IllegalStateException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        
+//        mv.setViewName("redirect:/HomeAdmin");
+//
+//        return mv;
+		
+		System.out.println("파일업로드 넘어옴");
+		JsonObject json = new JsonObject();
+		PrintWriter printWriter = null;
+		OutputStream out = null;
+		MultipartFile file = multiFile.getFile("img_file");
+		if (file != null) {
+			if (file.getSize() > 0 && StringUtils.isNotBlank(file.getName())) {
+				if (file.getContentType().toLowerCase().startsWith("image/")) {
+					try {
+						String fileName = file.getName();
+						byte[] bytes = file.getBytes();
+						String uploadPath = req.getServletContext().getRealPath("/upload");
+						File uploadFile = new File(uploadPath);
+						if (!uploadFile.exists()) {
+							uploadFile.mkdirs();
+						}
+						fileName = UUID.randomUUID().toString();
+						uploadPath = uploadPath + "/" + fileName;
+						System.out.println(uploadPath);
+						out = new FileOutputStream(new File(uploadPath));
+						out.write(bytes);
+
+						printWriter = resp.getWriter();
+						resp.setContentType("text/html");
+						String fileUrl = req.getContextPath() + "/upload/" + fileName;
+
+						System.out.println("111111111111111111111111111" + fileUrl);
+
+						json.addProperty("uploaded", 1);
+						json.addProperty("fileName", fileName);
+						json.addProperty("url", fileUrl);
+						
+						UserVo.setUserimg(fileUrl);
+						UserSvc.SetMyInfo(UserVo);
+
+						resp.sendRedirect("HomeAdmin");
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						if (out != null) {
+							out.close();
+						}
+						if (printWriter != null) {
+							printWriter.close();
+						}
+					}
+				}
+			}
+		}
+		return null;
+    }
 
 	/* 로그인 페이지 */
 	@RequestMapping(value = "/Login")

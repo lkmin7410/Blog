@@ -12,7 +12,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Blog Post - Start Bootstrap Template</title>
+<title>경민이의 즐거운 코딩생활</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
@@ -33,7 +33,13 @@ border-color:rgb(24, 26, 27);
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="Home">Start Bootstrap</a>
+			<c:if test="${empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">블로그</a>
+			</c:if>
+
+			<c:if test="${not empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">${Myinfo.userblogname}</a>
+			</c:if>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -41,12 +47,12 @@ border-color:rgb(24, 26, 27);
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#!">
+					<li class="nav-item active"><a class="nav-link" href="Home">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+					<!-- <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
 					<li class="nav-item"><a class="nav-link" href="#!">Services</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+					<li class="nav-item"><a class="nav-link" href="#!">Contact</a></li> -->
 				</ul>
 			</div>
 		</div>
@@ -81,6 +87,7 @@ border-color:rgb(24, 26, 27);
 						value="${sessionScope.session_id}">
 						
 					<input type="button" class="btn btn-primary save" value="저장">
+					<input type="button" class="btn btn-primary" value="취소" onclick="location.href='Home'">
 					<div class="save_button" style="display: none;">
 						<span>공개 여부</span>
 						<input type="radio" name="public_setting" checked="checked" value="전체공개">전체 공개

@@ -12,12 +12,21 @@ public class HomeCommentVo {
 	private int seq;
 	private int post_seq;
 	private	String userid;
+	private String userimg;
 	private	String comment;
 	private	Date regdate;
 	
 	//댓글의 답글
 	private int reply_seq;
-
+	
+	
+	
+	public String getUserimg() {
+		return userimg;
+	}
+	public void setUserimg(String userimg) {
+		this.userimg = userimg;
+	}
 	public int getReply_seq() {
 		return reply_seq;
 	}

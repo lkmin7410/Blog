@@ -20,7 +20,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -77,7 +76,7 @@ public class HomeCtr {
 		List<?> Categories = HomeSvc.GetCategories(); // 카테고리 리스트 가져오기
 		HomeSearchVO.publicpageCalculate(HomeSvc.selectHomeCount(HomeSearchVO)); // 페이징 처리
 		List<?> PostList = HomeSvc.GetMYPostList(HomeSearchVO); // 게시글 리스트
-		UserVo = HomeSvc.GetMyInfo(s_id);
+		UserVo = HomeSvc.GetMyInfo(s_id); //정보 가져오기
 
 		modelMap.addAttribute("Myinfo", UserVo);
 		modelMap.addAttribute("Categories", Categories);
@@ -86,6 +85,8 @@ public class HomeCtr {
 
 		return "home/HomeAdmin";
 	}
+	
+	
 
 	/* 일괄삭제 */
 	@RequestMapping(value = "deleteAction", method =RequestMethod.POST)
@@ -231,7 +232,11 @@ public class HomeCtr {
 	public String ForumEdit(HttpServletRequest req, HomeVo HomeVo, ModelMap modelMap) {
 
 		HomeVo HomeDetail = HomeSvc.GetViewDetail(HomeVo); // 게시글 내용 보기
+		List<?> Categories = HomeSvc.GetCategories(); // 카테고리 리스트 가져오기
+		
 		modelMap.addAttribute("HomeDetail", HomeDetail);
+		modelMap.addAttribute("Categories", Categories);
+		
 		return "home/HomeEdit";
 	}
 
@@ -254,19 +259,27 @@ public class HomeCtr {
 
 	/* 댓글 쓰기 POST방식 데이터 받는 컨트롤러 */
 	@RequestMapping(value = "PostComment", method = RequestMethod.POST)
-	public String HomePostComment(HttpServletRequest request, HomeCommentVo HomeCommentVo) {
-
+	public String HomePostComment(HttpServletRequest request,ModelMap modelMap, HomeCommentVo HomeCommentVo,UserVo UserVo) {
+		
+		UserVo = HomeSvc.GetMyInfo(HomeCommentVo.getUserid());
+		HomeCommentVo.setUserimg(UserVo.getUserimg());
 		HomeSvc.SetPostComment(HomeCommentVo);
+		
+		modelMap.addAttribute("Myinfo", UserVo);
 
 		return "redirect:/HomePost?seq=" + HomeCommentVo.getPost_seq();
 	}
 
 	/* 대댓글 쓰기 POST방식 데이터 받는 컨트롤러 */
 	@RequestMapping(value = "Commentreply", method = RequestMethod.POST)
-	public String HomeCommentreply(HttpServletRequest request, HomeCommentVo HomeCommentVo) {
-
+	public String HomeCommentreply(HttpServletRequest request,ModelMap modelMap, HomeCommentVo HomeCommentVo,UserVo UserVo) {
+		
+		UserVo = HomeSvc.GetMyInfo(HomeCommentVo.getUserid());
+		HomeCommentVo.setUserimg(UserVo.getUserimg());
 		HomeSvc.SetCommentReply(HomeCommentVo);
 
+		modelMap.addAttribute("Myinfo", UserVo);
+		
 		return "redirect:/HomePost?seq=" + HomeCommentVo.getPost_seq();
 	}
 

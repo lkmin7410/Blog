@@ -24,9 +24,12 @@
 		class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close"
 		p:driverClassName="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"
-		p:url="jdbc:log4jdbc:mysql://localhost/blog?useUnicode=true&amp;characterEncoding=utf8"
-		p:username="root" p:password="!qlalf45306380" p:initialSize="3"
+		p:url="jdbc:log4jdbc:mysql://3.34.54.186/MyBlog?useUnicode=true&amp;characterEncoding=utf8"
+		p:username="lkmin7410" p:password="!qlalf45306380" p:initialSize="3"
 		p:maxIdle="10" p:minIdle="3" p:validationQuery="SELECT 1" />
+		
+	<!-- p:url="jdbc:log4jdbc:mysql://localhost/blog?useUnicode=true&amp;characterEncoding=utf8"
+		p:username="root" p:password="!qlalf45306380" p:initialSize="3" -->	
 
 	<!-- SqlSession setup for MyBatis Database Layer -->
 	<bean id="sqlSession"

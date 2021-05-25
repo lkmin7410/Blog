@@ -86,16 +86,16 @@
 	<!-- POST 댓글 쓰기 -->
 	<insert id="SetPostComment"
 		parameterType="com.blog.home.HomeCommentVo">
-		insert into postcomment(post_seq,userid,comment)
-		values(${post_seq},'${userid}','${comment}')
+		insert into postcomment(post_seq,userid,comment,userimg)
+		values(${post_seq},'${userid}','${comment}','${userimg}')
 	</insert>
 
 	<!-- POST 대댓글 쓰기 -->
 	<insert id="SetCommentReply"
 		parameterType="com.blog.home.HomeCommentVo">
 		insert into
-		commentreply(post_seq,reply_seq,userid,comment)
-		values(${post_seq},'${reply_seq}','${userid}','${comment}')
+		commentreply(post_seq,reply_seq,userid,comment,userimg)
+		values(${post_seq},'${reply_seq}','${userid}','${comment}','${userimg}')
 	</insert>
 
 	<!-- Home 글 디테일 가져오기 -->

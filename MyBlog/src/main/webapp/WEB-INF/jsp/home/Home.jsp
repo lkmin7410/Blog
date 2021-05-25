@@ -12,7 +12,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Blog Home - Start Bootstrap Template</title>
+<title>경민이의 즐거운 코딩생활</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
@@ -60,13 +60,13 @@
 					<li class="nav-item active"><a class="nav-link" href="#!">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
-					<%--  					<c:if test="${not empty sessionScope.session_id}">
-						<li class="nav-item"><a class="nav-link" href="Login">로그아웃</a></li>
+					  <c:if test="${not empty sessionScope.session_id}">
+						<li class="nav-item"><a class="nav-link" href="Logout">로그아웃</a></li>
 					</c:if>
 
 					<c:if test="${empty sessionScope.session_id}">
 						<li class="nav-item"><a class="nav-link" href="SignUp">회원가입</a></li>
-					</c:if> --%>
+					</c:if> 
 				</ul>
 			</div>
 		</div>
@@ -76,53 +76,53 @@
 		<div class="row">
 			<!-- Blog entries-->
 			<div class="col-md-8">
-			<form  class="c_form">
-				<h1 class="my-4">
-					Categories :
-					<c:if test="${empty so.categories}">
-						<small>전체 보기</small>
-					</c:if>
-										
-					<c:if test="${not empty so.categories}">
-						<small>${so.categories}</small>
-						<input type="hidden" name="categories" value="${so.categories}">
-					</c:if>
-				</h1>
+				<form class="c_form">
+					<h1 class="my-4">
+						Categories :
+						<c:if test="${empty so.categories}">
+							<small>전체 보기</small>
+						</c:if>
+
+						<c:if test="${not empty so.categories}">
+							<small>${so.categories}</small>
+							<input type="hidden" name="categories" value="${so.categories}">
+						</c:if>
+					</h1>
 				</form>
-				
+
 				<!-- Blog post-->
 				<c:forEach var="i" items="${PostList}">
-				<c:choose>
-				<c:when test="${i.public_setting =='전체공개'}">
-					<div class="card mb-4">
-						<!-- <img class="card-img-top"
+					<c:choose>
+						<c:when test="${i.public_setting =='전체공개'}">
+							<div class="card mb-4">
+								<!-- <img class="card-img-top"
 							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
-						<div class="card-body">
-							<h2 class="card-title">${i.title}</h2>
-							<p class="card-text">${i.content}</p>
-							<a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read
-								More →</a>
-						</div>
-						<div class="card-footer text-muted">${i.regdate}</div>
-					</div>
-				</c:when>	
-					<c:when test="${sessionScope.session_id == i.writer}">
-					<div class="card mb-4">
-						<!-- <img class="card-img-top"
+								<div class="card-body">
+									<h2 class="card-title">${i.title}</h2>
+									<p class="card-text">${i.content}</p>
+									<a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read
+										More →</a>
+								</div>
+								<div class="card-footer text-muted">${i.regdate}</div>
+							</div>
+						</c:when>
+						<c:when test="${sessionScope.session_id == i.writer}">
+							<div class="card mb-4">
+								<!-- <img class="card-img-top"
 							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
-						<div class="card-body">
-						<c:if test="${i.public_setting == '비공개'}">
-							<h2 class="card-title">🔒 ${i.title}  </h2>
-						</c:if>	
-							<p class="card-text">${i.content}</p>
-							<a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read
-								More →</a>
-						</div>
-						<div class="card-footer text-muted">${i.regdate}</div>
-					</div>
-				</c:when>
-				
-				</c:choose>
+								<div class="card-body">
+									<c:if test="${i.public_setting == '비공개'}">
+										<h2 class="card-title">🔒 ${i.title}</h2>
+									</c:if>
+									<p class="card-text">${i.content}</p>
+									<a class="btn btn-primary" href="HomePost?seq=${i.seq}">Read
+										More →</a>
+								</div>
+								<div class="card-footer text-muted">${i.regdate}</div>
+							</div>
+						</c:when>
+
+					</c:choose>
 				</c:forEach>
 
 				<!-- 페이징 설정을 위한 Startnum, Lastnum, Page 변수 -->
@@ -194,25 +194,27 @@
 										class="input-group-append"><button
 											class="btn btn-secondary" type="submit">Go!</button></span>
 								</div>
-								<a href="#" class="morebutton">more..</a>
+								 <a href="#" class="morebutton">more..</a> 
 
-								<div class="more" style="display: none;">
-								<hr>
+								 <div class="more" style="display: none;">
+									<hr>
 									<ul class="mb-0">
+										<li>네이버 로그인</li>
+										<li>카카오 로그인</li>
 										<li><a href="SignUp">회원가입</a></li>
 									</ul>
-								</div>
+								</div> 
 							</div>
 
 
 
-							<script type="text/javascript">
+							 <script type="text/javascript">
 								$(function() {
 									$('.morebutton').click(function() {
 										$('.more').toggle();
 									});
 								});
-							</script>
+							</script>  
 						</div>
 					</form>
 				</c:if>
@@ -223,16 +225,18 @@
 						<h5 class="card-header">Profile</h5>
 						<div class="card-body">
 							<div class="row">
-								<div class="col-lg-6">
+								<div class="col-lg-6" style="border: solid 1px white; padding: 5px;">
 									<ul class="list-unstyled mb-0">
-										<li><a href="#!">${Myinfo.usernickname}님</a></li>
-										<li><a href="HomeAdmin">관리</a></li>
+										<li><img alt="" src="${Myinfo.userimg}" /></li>
+										<li><a href="#!">${Myinfo.usernickname}</a><br>(${Myinfo.userid})</li>
+										<li> <p>${Myinfo.userIntroduction}</p> </li>
+										
 									</ul>
 								</div>
 								<div class="col-lg-6">
 									<ul class="list-unstyled mb-0">
 										<li><a href="Write">글 쓰기</a></li>
-										<li><a href="Logout">로그아웃</a></li>
+										<li><a href="HomeAdmin">관리</a></li>
 									</ul>
 								</div>
 							</div>
@@ -253,30 +257,6 @@
 											class="recent">${Categories.categories}</a></li>
 									</c:forEach>
 								</ul>
-								<c:if test="${not empty sessionScope.session_id}">
-									<hr>
-									<ul class="list-unstyled mb-0">
-									 	<li style="float: right;">
-										<button class="btn btn-secondary categories">New!</button>
-										</li> 
-									</ul>
-									<div class="newcategories">
-										<form action="Categories" method="post">
-											<input class="form-control" type="text"
-												placeholder="New Categories..." name="categories"> <span
-												class="input-group-append"><button
-													class="btn btn-secondary" type="submit">생성</button></span>
-										</form>
-									</div>
-								</c:if>
-								<script type="text/javascript">
-									$(function() {
-										$('.categories').click(function() {
-											$('.newcategories').toggle();
-										});
-									});
-								</script>
-
 							</div>
 						</div>
 					</div>

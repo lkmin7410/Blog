@@ -12,7 +12,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Blog Post - Start Bootstrap Template</title>
+<title>경민이의 즐거운 코딩생활</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
@@ -36,7 +36,15 @@ p>img {
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="Home">Start Bootstrap</a>
+
+			<c:if test="${empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">블로그</a>
+			</c:if>
+
+			<c:if test="${not empty sessionScope.session_id}">
+				<a class="navbar-brand" href="Home">${Myinfo.userblogname}</a>
+			</c:if>
+
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +52,10 @@ p>img {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#!">
+					<li class="nav-item active"><a class="nav-link" href="Home">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">Services</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+
 				</ul>
 			</div>
 		</div>
@@ -85,82 +91,103 @@ p>img {
 				<p class="lead">${HomeVo.content}</p>
 				<hr />
 				<c:if test="${HomeVo.reply_setting == 'Y'}">
-				<!-- Comments form-->
-				<div class="card my-4">
-					<h5 class="card-header">Leave a Comment:</h5>
-					<div class="card-body">
-						<form action="PostComment" method="post">
-							<div class="form-group">
-								<textarea name="comment" class="form-control" rows="3"></textarea>
-							</div>
-							<input type="hidden" name="userid"
-								value="${sessionScope.session_id}"> <input type="hidden"
-								name="post_seq" value="${HomeVo.seq}">
-							<button class="btn btn-primary" type="submit">Submit</button>
-						</form>
-					</div>
-				</div>
-				</c:if>
-				<c:if test="${HomeVo.reply_setting == 'N'}">
-						<div class="card my-4">
-					<h5 class="card-header" style="text-align: center;">댓글을 남길 수 없는 게시글입니다.</h5>
-					
-				</div>
-				</c:if>
-				
-				<!-- Single comment-->
-				<c:forEach var="co" items="${CommentList}" varStatus="status">
-					<div class="media mb-4">
-						<img class="d-flex mr-3 rounded-circle"
-							src="https://via.placeholder.com/50x50" alt="..." />
-						<div class="media-body">
-							<h5 class="mt-0">Commenter Name :: ${co.userid}</h5>
-							${co.comment} <br> ${co.regdate} <br>
-							<button class="btn btn-primary reply_button${status.count}">Reply</button>
-
-							<!-- 대댓글 리스트 -->
-							<c:forEach var="cr" items="${newBoardReplyList}">
-								<c:if test="${co.seq == cr.reply_seq}">
-									<div class="media mt-4">
-										<img class="d-flex mr-3 rounded-circle"
-											src="https://via.placeholder.com/50x50" alt="..." />
-										<div class="media-body">
-											<h5 class="mt-0">Commenter Name :: ${cr.userid}</h5>
-											${cr.comment} <br> ${cr.regdate}
-										</div>
-									</div>
-								</c:if>
-							</c:forEach>
-
-							<!-- 대댓글 입력 창 -->
-							<div class="card my-4 reply${status.count} hide">
-								<h5 class="card-header">Leave a Comment:</h5>
-								<div class="card-body">
-									<form action="Commentreply" method="post">
-										<div class="form-group">
-											<textarea name="comment" class="form-control" rows="3"></textarea>
-										</div>
-										<input type="hidden" name="userid"
-											value="${sessionScope.session_id}"> <input
-											type="hidden" name="reply_seq" value="${co.seq}"> <input
-											type="hidden" name="post_seq" value="${HomeVo.seq}">
-										<button class="btn btn-primary" type="submit">Submit</button>
-									</form>
+				<c:if test="${not empty sessionScope.session_id}">
+					<!-- Comments form-->
+					<div class="card my-4">
+						<h5 class="card-header">Leave a Comment:</h5>
+						<div class="card-body">
+							<form action="PostComment" method="post">
+								<div class="form-group">
+									<textarea name="comment" class="form-control" rows="3"></textarea>
 								</div>
-							</div>
-
-							<script type="text/javascript">
-								$(function() {
-									$('.reply_button${status.count}').click(
-											function() {
-												$('.reply${status.count}')
-														.toggle();
-											});
-								});
-							</script>
+								<input type="hidden" name="userid"
+									value="${sessionScope.session_id}"> <input
+									type="hidden" name="post_seq" value="${HomeVo.seq}"> <input
+									type="hidden" name="userimg" value="${Myinfo.userimg}">
+								<button class="btn btn-primary" type="submit">Submit</button>
+							</form>
 						</div>
 					</div>
-				</c:forEach>
+				</c:if>
+				<c:if test="${empty sessionScope.session_id}">
+				<!-- Comments form-->
+					<div class="card my-4">
+						<h5 class="card-header">Leave a Comment:</h5>
+						<div class="card-body">
+								<div class="form-group">
+									<textarea name="comment" class="form-control" rows="3" readonly>로그인 후에 이용해 주세요.</textarea>
+								</div>
+						</div>
+					</div>
+				</c:if>
+				
+					<!-- Single comment-->
+					<c:forEach var="co" items="${CommentList}" varStatus="status">
+						<div class="media mb-4">
+							<img class="d-flex mr-3 rounded-circle" src="${co.userimg}"
+								alt="..." style="width: 50px; height: 50px;" />
+							<div class="media-body">
+								<h5 class="mt-0">Commenter Name :: ${co.userid}</h5>
+								${co.comment} <br> ${co.regdate} <br>
+								<c:if test="${not empty sessionScope.session_id}">
+								<button class="btn btn-primary reply_button${status.count}">Reply</button>
+								</c:if>	
+								<!-- 대댓글 리스트 -->
+								<c:forEach var="cr" items="${newBoardReplyList}">
+									<c:if test="${co.seq == cr.reply_seq}">
+										<div class="media mt-4">
+											<img class="d-flex mr-3 rounded-circle" src="${cr.userimg}"
+												alt="..." style="width: 50px; height: 50px;" />
+											<div class="media-body">
+												<h5 class="mt-0">Commenter Name :: ${cr.userid}</h5>
+												${cr.comment} <br> ${cr.regdate}
+											</div>
+										</div>
+									</c:if>
+								</c:forEach>
+
+								<!-- 대댓글 입력 창 -->
+								<div class="card my-4 reply${status.count} hide">
+									<h5 class="card-header">Leave a Comment:</h5>
+									<div class="card-body">
+										<form action="Commentreply" method="post">
+											<div class="form-group">
+												<textarea name="comment" class="form-control" rows="3"></textarea>
+											</div>
+											<input type="hidden" name="userid"
+												value="${sessionScope.session_id}"> <input
+												type="hidden" name="reply_seq" value="${co.seq}"> <input
+												type="hidden" name="post_seq" value="${HomeVo.seq}">
+											<input type="hidden" name="userimg" value="${Myinfo.userimg}">
+											<button class="btn btn-primary" type="submit">Submit</button>
+										</form>
+									</div>
+								</div>
+
+								<script type="text/javascript">
+									$(function() {
+										$('.reply_button${status.count}')
+												.click(
+														function() {
+															$(
+																	'.reply${status.count}')
+																	.toggle();
+														});
+									});
+								</script>
+							</div>
+						</div>
+					</c:forEach>
+
+				</c:if>
+				<c:if test="${HomeVo.reply_setting == 'N'}">
+					<div class="card my-4">
+						<h5 class="card-header" style="text-align: center;">댓글을 남길 수
+							없는 게시글입니다.</h5>
+
+					</div>
+				</c:if>
+
 			</div>
 			<!-- Sidebar widgets column-->
 			<div class="col-md-4">
@@ -188,7 +215,7 @@ p>img {
 											class="recent">${Categories.categories}</a></li>
 									</c:forEach>
 								</ul>
-								
+
 								<script type="text/javascript">
 									$(function() {
 										$('.categories').click(function() {
@@ -202,12 +229,12 @@ p>img {
 					</div>
 				</div>
 				<!-- Side widget-->
-				<div class="card my-4">
+				<!-- <div class="card my-4">
 					<h5 class="card-header">Side Widget</h5>
 					<div class="card-body">You can put anything you want inside
 						of these side widgets. They are easy to use, and feature the new
 						Bootstrap 4 card containers!</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

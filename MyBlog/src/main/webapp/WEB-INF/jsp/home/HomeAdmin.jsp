@@ -12,7 +12,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Blog Home - Start Bootstrap Template</title>
+<title>경민이의 즐거운 코딩생활</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
@@ -53,6 +53,10 @@
 table {
 	text-align: center;
 }
+
+.newcategories {
+	display: none;
+}
 </style>
 
 </head>
@@ -65,8 +69,7 @@ table {
 			</c:if>
 
 			<c:if test="${not empty sessionScope.session_id}">
-				<a class="navbar-brand" href="Home">${Myinfo.userblogname}
-					</a>
+				<a class="navbar-brand" href="Home">${Myinfo.userblogname} </a>
 			</c:if>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -76,7 +79,7 @@ table {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#!">
+					<li class="nav-item active"><a class="nav-link" href="Home">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
 					<%--  					<c:if test="${not empty sessionScope.session_id}">
@@ -109,36 +112,37 @@ table {
 					</h1>
 
 				</form>
-				
-				<form action="MyinfoEdit">
-				<!-- 내 정보 -->
-				<div class="card mb-4 info">
-					<!-- <img class="card-img-top"
+
+				<form action="MyinfoEdit" method="post" class="profile"
+					enctype="multipart/form-data">
+					<!-- 내 정보 -->
+					<div class="card mb-4 info">
+						<!-- <img class="card-img-top"
 							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
-					<div class="card-body">
-						<p class="card-text my_info">블로그명</p>
-						<input class="form-control my_info_blogname" type="text"
-							name="userblogname" value="${Myinfo.userblogname}">
-						<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
-						<hr>
-						<p class="card-text my_info">별명</p>
-						<input class="form-control my_info_blogname" type="text"
-							name="usernickname" value="${Myinfo.usernickname}">
-						<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
-						<hr>
-						<p class="card-text my_info">소개글</p>
-						<textarea class="form-control my_info_blogname" rows="5" cols="3"></textarea>
-						<p>블로그 프로필 영역의 프로필 이미지 아래에 반영됩니다. (한글 기준 200자 이내)</p>
-						<hr>
-						<p class="card-text my_info">프로필 이미지</p>
-						<input class="form-control my_info_blogname" type="text"
-							name="blogname">
-						<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
-						<hr>
-						<input type="hidden" name="userid" value="${Myinfo.userid}">
-						<input type="submit" value="수정">
+						<div class="card-body">
+							<p class="card-text my_info">블로그명</p>
+							<input class="form-control my_info_blogname" type="text"
+								name="userblogname" value="${Myinfo.userblogname}">
+							<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
+							<hr>
+							<p class="card-text my_info">별명</p>
+							<input class="form-control my_info_blogname" type="text"
+								name="usernickname" value="${Myinfo.usernickname}">
+							<p>한글, 영문, 숫자 혼용가능 (한글 기준 25자 이내)</p>
+							<hr>
+							<p class="card-text my_info">소개글</p>
+							<textarea class="form-control my_info_blogname"
+								name="userIntroduction" rows="5" cols="3">${Myinfo.userIntroduction}</textarea>
+							<p>블로그 프로필 영역의 프로필 이미지 아래에 반영됩니다. (한글 기준 200자 이내)</p>
+							<hr>
+							<p class="card-text my_info">프로필 이미지</p>
+							<input type="file" name="img_file">
+
+							<hr>
+							<input type="hidden" name="userid" value="${Myinfo.userid}">
+							<input type="submit" value="수정">
+						</div>
 					</div>
-				</div>
 				</form>
 				<!-- 메뉴,글 관리 -->
 				<div class="card mb-4 menu">
@@ -174,9 +178,9 @@ table {
 									<td>등록일</td>
 								</tr>
 							</table>
-</form>
-							<hr>
-<form action="deleteAction" method="post">
+						</form>
+						<hr>
+						<form action="deleteAction" method="post">
 							<table>
 								<c:forEach var="p" items="${PostList}">
 									<tr
@@ -201,7 +205,7 @@ table {
 
 							</table>
 							<input type="submit" value="삭제">
-	</form>					
+						</form>
 					</div>
 				</div>
 
@@ -270,10 +274,36 @@ table {
 						<div>
 							<div>
 								<ul class="mb-0">
-									<li>
-									
-									</li>
+									<li><a href="Home" class="recent">전체 보기</a></li>
+									<c:forEach var="Categories" items="${Categories}">
+										<li><a href="Home?categories=${Categories.categories}"
+											class="recent">${Categories.categories}</a> <a href="#" style="color: red;">X</a> </li>
+									</c:forEach>
 								</ul>
+								<c:if test="${not empty sessionScope.session_id}">
+									<hr>
+									<ul class="list-unstyled mb-0">
+										<li style="float: right;">
+											<button class="btn btn-secondary categories">New!</button>
+										</li>
+									</ul>
+									<div class="newcategories">
+										<form action="Categories" method="post">
+											<input class="form-control" type="text"
+												placeholder="New Categories..." name="categories"> <span
+												class="input-group-append"><button
+													class="btn btn-secondary" type="submit">생성</button></span>
+										</form>
+									</div>
+								</c:if>
+								<script type="text/javascript">
+									$(function() {
+										$('.categories').click(function() {
+											$('.newcategories').toggle();
+										});
+									});
+								</script>
+
 							</div>
 						</div>
 					</div>
