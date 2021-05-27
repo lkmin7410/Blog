@@ -17,6 +17,17 @@ private String userimg;
 private String userIntroduction;
 
 
+public UserVo() {}
+
+public UserVo(String n_id, String n_name, String n_mail, String n_nickname, String n_img) {
+	this.userid = n_id;
+	this.username = n_name;
+	this.useremail = n_mail;
+	this.usernickname = n_nickname;
+	this.userimg = n_img;
+}
+
+
 public String getUserIntroduction() {
 	return userIntroduction;
 }

@@ -13,8 +13,8 @@
 	<!-- 회원가입 -->
 	<insert id="SetSignUp" parameterType="com.blog.user.UserVo">
 		insert into
-		user(userid,userpw,username,usernickname,userblogname,useremail)
-		values(#{userid},#{userpw},#{username},#{usernickname},#{userid},#{useremail})
+		user(userid,userpw,username,usernickname,userblogname,useremail,userimg)
+		values(#{userid},#{userpw},#{username},#{usernickname},#{usernickname},#{useremail},#{userimg})
 	</insert>
 
 	<!-- 회원가입 아이디 중복확인 -->

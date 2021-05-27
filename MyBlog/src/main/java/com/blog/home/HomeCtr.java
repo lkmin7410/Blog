@@ -1,10 +1,17 @@
 package com.blog.home;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +32,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.blog.user.UserCtr;
+import com.blog.user.UserSvc;
 import com.blog.user.UserVo;
 import com.google.gson.JsonObject;
 
@@ -31,12 +42,17 @@ public class HomeCtr {
 
 	@Autowired
 	private HomeSvc HomeSvc;
+	
+	@Autowired
+	private UserSvc UserSvc;
+
 
 	/**
 	 * 메인 홈페이지 글 목록 가져오기
+	 * 네이버 로그인
 	 */
 	@RequestMapping(value = "Home")
-	public String Home(HttpServletRequest req, ModelMap modelMap, HomeSearchVO HomeSearchVO, UserVo UserVo) {
+	public String Home(HttpServletRequest req, ModelMap modelMap, HomeSearchVO HomeSearchVO, UserVo UserVo) throws IOException{
 
 		HttpSession session = req.getSession();
 		String s_id = (String) session.getAttribute("session_id");
@@ -46,7 +62,20 @@ public class HomeCtr {
 		List<HomeVo> CommentList = HomeSvc.GetRecentComments(); // 최근 댓글 리스트
 		List<?> Categories = HomeSvc.GetCategories(); // 카테고리 리스트 가져오기
 		UserVo = HomeSvc.GetMyInfo(s_id);
-
+		
+		SecureRandom random = new SecureRandom();
+		String state = new BigInteger(130, random).toString();
+		String N_clientId = "P3DILcndDBYRpCcWvUq0";
+		String N_redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/N_callback", "UTF-8");
+		
+		
+		String N_apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+		N_apiURL += "&client_id=" + N_clientId;
+		N_apiURL += "&redirect_uri=" + N_redirectURI;
+		N_apiURL += "&state=" + state;
+		session.setAttribute("state", state);
+		
+		modelMap.addAttribute("N_apiURL", N_apiURL);
 		modelMap.addAttribute("Myinfo", UserVo);
 		modelMap.addAttribute("so", HomeSearchVO);
 		modelMap.addAttribute("PostList", PostList);
@@ -55,6 +84,152 @@ public class HomeCtr {
 
 		return "home/Home";
 	}
+	
+	//네이버 로그인 콜백
+		@RequestMapping(value = "N_callback")
+		public String NaverCallback(HttpServletRequest request, HttpServletResponse response)
+				throws IOException {
+			String clientId = "P3DILcndDBYRpCcWvUq0";
+			String clientSecret = "kBv199HnOR";
+			String code = request.getParameter("code");
+			String redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/N_callback", "UTF-8");
+			String state = request.getParameter("state");
+			
+			String apiURL;
+			apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
+			apiURL += "client_id=" + clientId;
+			apiURL += "&client_secret=" + clientSecret;
+			apiURL += "&redirect_uri=" + redirectURI;
+			apiURL += "&code=" + code;
+			apiURL += "&state=" + state;
+			String access_token = "";
+			String refresh_token = "";
+			System.out.println("apiURL=" + apiURL);
+
+			try {
+				URL url = new URL(apiURL);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("GET");
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				System.out.print("responseCode=" + responseCode);
+				if (responseCode == 200) {
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else {
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					res.append(inputLine);
+				}
+				br.close();
+				if (responseCode == 200) {
+					System.out.println(res.toString());
+					JSONParser parsing = new JSONParser();
+					Object obj = parsing.parse(res.toString());
+					JSONObject jsonObj = (JSONObject) obj;
+
+					access_token = (String) jsonObj.get("access_token");
+					refresh_token = (String) jsonObj.get("refresh_token");
+
+					System.out.println("acc_to: " + access_token);
+					System.out.println("refresh_token : " + refresh_token);
+
+					Naverinfo(request, response, access_token); //Naverinfo라는 메소드에 값들을 전달하여 정보값을 받아올꺼임!
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+				return "redirect:/Home";
+		}
+		
+		//네이버 유저 정보 
+		private void Naverinfo(HttpServletRequest req, HttpServletResponse response, String access_token) {
+			
+			String reqURL = "https://openapi.naver.com/v1/nid/me";
+			String name = "";
+			String email = "";
+			String id = "";
+			String nickname = "";
+			String naverprofileimage = "";
+			
+			UserVo uo = new UserVo();
+
+			try {
+				URL url = new URL(reqURL);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("GET");
+				con.setRequestProperty("Authorization", "Bearer " + access_token);
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				System.out.print("responseCode=" + responseCode);
+				if (responseCode == 200) {
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else {
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					res.append(inputLine);
+				}
+				br.close();
+
+				System.out.println(inputLine);
+	            //여기서 사용자 정보들이 json형태로 받아와짐
+
+				if (responseCode == 200) {
+					System.out.println(res.toString());
+					JSONParser parsing = new JSONParser();
+					Object obj = parsing.parse(res.toString());
+					JSONObject jsonObj = (JSONObject) obj;
+					JSONObject naver_account = (JSONObject) obj;
+
+					naver_account = (JSONObject) jsonObj.get("response");
+
+					id = (String) naver_account.get("id");
+					name = (String) naver_account.get("name");
+					email = (String) naver_account.get("email");
+					nickname = (String) naver_account.get("nickname");
+					naverprofileimage = (String) naver_account.get("profile_image");
+					
+	                //받아오는 정보 값들
+	                
+					System.out.println("id : " + id);
+					System.out.println("이름 : " + name);
+					System.out.println("메일 : " + email);
+					System.out.println("닉넴 : "+ nickname);
+					System.out.println("프로필 이미지 : "+naverprofileimage);
+					
+					int check = UserSvc.idCheck(id);
+					
+					if(check == 0) {
+						uo = new UserVo(id,name,email,nickname,naverprofileimage);
+						System.out.println("111111111111111111111"+uo.getUserid());
+						System.out.println("111111111111111111111"+uo.getUserimg());
+						
+						UserSvc.SetSignUp(uo);
+						
+						System.out.println("회원가입 완료");
+					}else {
+						System.out.println("로그인 됨");
+					}
+					
+					UserCtr uc = new UserCtr();
+					
+					uc.HomeLoginPost(req, uo, null);
+					
+					HttpSession session = req.getSession();
+					session.setAttribute("session_id", id);
+					
+					
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		
 
 	/* 카테고리 생성 */
 	@RequestMapping(value = "Categories", method = RequestMethod.POST)
@@ -218,7 +393,13 @@ public class HomeCtr {
 			}
 		}
 		List<?> Categories = HomeSvc.GetCategories(); // 카테고리 리스트 가져오기
-
+		
+		HttpSession session = request.getSession();
+		String s_id = (String) session.getAttribute("session_id");
+		if(s_id != null) {
+		UserVo UserVo = HomeSvc.GetMyInfo(s_id); //정보 가져오기
+		modelMap.addAttribute("Myinfo", UserVo);
+		}
 		modelMap.addAttribute("HomeVo", HomeVo);
 		modelMap.addAttribute("CommentList", CommentList);
 		modelMap.addAttribute("newBoardReplyList", newBoardReplyList);
@@ -263,6 +444,7 @@ public class HomeCtr {
 		
 		UserVo = HomeSvc.GetMyInfo(HomeCommentVo.getUserid());
 		HomeCommentVo.setUserimg(UserVo.getUserimg());
+		HomeCommentVo.setUsernickname(UserVo.getUsernickname());
 		HomeSvc.SetPostComment(HomeCommentVo);
 		
 		modelMap.addAttribute("Myinfo", UserVo);
@@ -276,6 +458,7 @@ public class HomeCtr {
 		
 		UserVo = HomeSvc.GetMyInfo(HomeCommentVo.getUserid());
 		HomeCommentVo.setUserimg(UserVo.getUserimg());
+		HomeCommentVo.setUsernickname(UserVo.getUsernickname());
 		HomeSvc.SetCommentReply(HomeCommentVo);
 
 		modelMap.addAttribute("Myinfo", UserVo);

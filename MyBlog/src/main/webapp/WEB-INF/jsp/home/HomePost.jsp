@@ -104,6 +104,7 @@ p>img {
 									value="${sessionScope.session_id}"> <input
 									type="hidden" name="post_seq" value="${HomeVo.seq}"> <input
 									type="hidden" name="userimg" value="${Myinfo.userimg}">
+									<input type="hidden" value="${Myinfo.usernickname}"> 
 								<button class="btn btn-primary" type="submit">Submit</button>
 							</form>
 						</div>
@@ -127,7 +128,7 @@ p>img {
 							<img class="d-flex mr-3 rounded-circle" src="${co.userimg}"
 								alt="..." style="width: 50px; height: 50px;" />
 							<div class="media-body">
-								<h5 class="mt-0">Commenter Name :: ${co.userid}</h5>
+								<h5 class="mt-0">Commenter Name :: ${co.usernickname}</h5>
 								${co.comment} <br> ${co.regdate} <br>
 								<c:if test="${not empty sessionScope.session_id}">
 								<button class="btn btn-primary reply_button${status.count}">Reply</button>
@@ -139,7 +140,7 @@ p>img {
 											<img class="d-flex mr-3 rounded-circle" src="${cr.userimg}"
 												alt="..." style="width: 50px; height: 50px;" />
 											<div class="media-body">
-												<h5 class="mt-0">Commenter Name :: ${cr.userid}</h5>
+												<h5 class="mt-0">Commenter Name :: ${cr.usernickname}</h5>
 												${cr.comment} <br> ${cr.regdate}
 											</div>
 										</div>

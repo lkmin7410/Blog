@@ -12,6 +12,7 @@ public class HomeCommentVo {
 	private int seq;
 	private int post_seq;
 	private	String userid;
+	private String usernickname;
 	private String userimg;
 	private	String comment;
 	private	Date regdate;
@@ -21,6 +22,12 @@ public class HomeCommentVo {
 	
 	
 	
+	public String getUsernickname() {
+		return usernickname;
+	}
+	public void setUsernickname(String usernickname) {
+		this.usernickname = usernickname;
+	}
 	public String getUserimg() {
 		return userimg;
 	}

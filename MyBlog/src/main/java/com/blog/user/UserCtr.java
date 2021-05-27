@@ -61,6 +61,8 @@ public class UserCtr {
 	public ModelAndView upload(
 			MultipartHttpServletRequest multiFile,HttpServletRequest req,HttpServletResponse resp, ModelAndView mv, HomeSearchVO HomeSearchVO, UserVo UserVo) throws IOException {
 
+		
+		//내 pc에만 저장 됨
 //		public ModelAndView upload(
 //	            @RequestParam(value="img_file", required = false) MultipartFile mf,HttpServletRequest req, ModelAndView mv, HomeSearchVO HomeSearchVO, UserVo UserVo) {
 		
@@ -163,6 +165,7 @@ public class UserCtr {
 			return "redirect:/Home";
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "redirect:/Home";
 		}
 	}

@@ -60,13 +60,13 @@
 					<li class="nav-item active"><a class="nav-link" href="#!">
 							Home <span class="sr-only">(current)</span>
 					</a></li>
-					  <c:if test="${not empty sessionScope.session_id}">
+					<c:if test="${not empty sessionScope.session_id}">
 						<li class="nav-item"><a class="nav-link" href="Logout">로그아웃</a></li>
 					</c:if>
 
 					<c:if test="${empty sessionScope.session_id}">
 						<li class="nav-item"><a class="nav-link" href="SignUp">회원가입</a></li>
-					</c:if> 
+					</c:if>
 				</ul>
 			</div>
 		</div>
@@ -194,27 +194,27 @@
 										class="input-group-append"><button
 											class="btn btn-secondary" type="submit">Go!</button></span>
 								</div>
-								 <a href="#" class="morebutton">more..</a> 
+								<a href="#" class="morebutton">more..</a>
 
-								 <div class="more" style="display: none;">
+								<div class="more" style="display: none;">
 									<hr>
 									<ul class="mb-0">
-										<li>네이버 로그인</li>
+										<li><a href="${N_apiURL}"> 네이버 로그인</a></li>
 										<li>카카오 로그인</li>
 										<li><a href="SignUp">회원가입</a></li>
 									</ul>
-								</div> 
+								</div>
 							</div>
 
 
 
-							 <script type="text/javascript">
+							<script type="text/javascript">
 								$(function() {
 									$('.morebutton').click(function() {
 										$('.more').toggle();
 									});
 								});
-							</script>  
+							</script>
 						</div>
 					</form>
 				</c:if>
@@ -225,12 +225,17 @@
 						<h5 class="card-header">Profile</h5>
 						<div class="card-body">
 							<div class="row">
-								<div class="col-lg-6" style="border: solid 1px white; padding: 5px;">
+								<div class="col-lg-6"
+									style="border: solid 1px white; padding: 5px;">
 									<ul class="list-unstyled mb-0">
 										<li><img alt="" src="${Myinfo.userimg}" /></li>
-										<li><a href="#!">${Myinfo.usernickname}</a><br>(${Myinfo.userid})</li>
-										<li> <p>${Myinfo.userIntroduction}</p> </li>
-										
+										<li><c:if test="${empty Myinfo.userpw}">
+										(네이버)
+										</c:if><a href="#!">${Myinfo.usernickname} </a></li>
+										<li>
+											<p>${Myinfo.userIntroduction}</p>
+										</li>
+
 									</ul>
 								</div>
 								<div class="col-lg-6">
