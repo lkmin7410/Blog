@@ -273,13 +273,26 @@ table {
 					<div class="card-body">
 						<div>
 							<div>
+							
 								<ul class="mb-0">
 									<li><a href="Home" class="recent">전체 보기</a></li>
 									<c:forEach var="Categories" items="${Categories}">
-										<li><a href="Home?categories=${Categories.categories}"
-											class="recent">${Categories.categories}</a> <a href="#" style="color: red;">X</a> </li>
+									
+										<li>
+										<form action="RemoveCategories" method="post">
+											<a href="#"class="recent">
+																     ${Categories.categories}
+												<c:if test="${Categories.writer == sessionScope.session_id}">
+													<input type="hidden" name="categories" value="${Categories.categories}">
+														<button class="btn" type="submit" style="color: red">X</button>
+												</c:if>
+											</a>
+										</form>		
+										</li>
+											 
 									</c:forEach>
 								</ul>
+							
 								<c:if test="${not empty sessionScope.session_id}">
 									<hr>
 									<ul class="list-unstyled mb-0">
@@ -291,7 +304,9 @@ table {
 										<form action="Categories" method="post">
 											<input class="form-control" type="text"
 												placeholder="New Categories..." name="categories"> <span
-												class="input-group-append"><button
+												class="input-group-append">
+												
+												<button
 													class="btn btn-secondary" type="submit">생성</button></span>
 										</form>
 									</div>

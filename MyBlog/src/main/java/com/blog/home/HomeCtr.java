@@ -233,9 +233,27 @@ public class HomeCtr {
 
 	/* 카테고리 생성 */
 	@RequestMapping(value = "Categories", method = RequestMethod.POST)
-	public String Categories(HomeVo HomeVo) {
+	public String Categories(HttpServletRequest req, HomeVo HomeVo) {
+		
+		HttpSession session = req.getSession();
+		String s_id = (String) session.getAttribute("session_id");
+		HomeVo.setWriter(s_id);
+		
+		HomeSvc.SetCategories(HomeVo);
 
-		HomeSvc.SetCategories(HomeVo.getCategories());
+		return "redirect:/Home";
+	}
+	
+	/* 카테고리 삭제 */
+	@RequestMapping(value = "RemoveCategories", method = RequestMethod.POST)
+	public String RemoveCategories(HttpServletRequest req,HomeVo HomeVo) {
+		
+		HttpSession session = req.getSession();
+		String s_id = (String) session.getAttribute("session_id");
+		HomeVo.setWriter(s_id);
+		
+		HomeSvc.RemovePost(HomeVo);
+		HomeSvc.RemoveCategories(HomeVo);
 
 		return "redirect:/Home";
 	}
@@ -263,7 +281,7 @@ public class HomeCtr {
 	
 	
 
-	/* 일괄삭제 */
+	/* 글 일괄삭제 */
 	@RequestMapping(value = "deleteAction", method =RequestMethod.POST)
 	public String deleteAction(HttpServletRequest req,ModelMap modelMap,HomeVo HomeVo) {
 
@@ -275,6 +293,8 @@ public class HomeCtr {
 		
 		return "redirect:/HomeAdmin";
 	}
+	
+	
 
 	/* 글 쓰기 페이지 */
 	@RequestMapping(value = "Write")

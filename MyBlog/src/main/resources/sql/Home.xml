@@ -54,9 +54,22 @@
 	<!-- Home 카테고리 생성 -->
 	<insert id="SetCategories" parameterType="com.blog.home.HomeVo">
 		insert into
-		categories(categories)
-		values('${categories}')
+		categories(categories,writer)
+		values('${categories}',#{writer})
 	</insert>
+	
+		<!-- Home 카테고리 삭제 -->
+	<delete id="RemoveCategories" parameterType="com.blog.home.HomeVo">
+		delete from categories WHERE
+		categories='${categories}' and writer = '${writer}'
+	</delete>
+	
+		<!-- Home 카테고리 삭제후 게시글 삭제 -->
+	<delete id="RemovePost" parameterType="com.blog.home.HomeVo">
+		delete from post WHERE
+		categories='${categories}'
+	</delete>
+	
 
 	<!-- Home 글 쓰기 -->
 	<insert id="SetWrite" parameterType="com.blog.home.HomeVo">

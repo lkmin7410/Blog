@@ -92,7 +92,13 @@ public class HomeSvc {
 	}
 	
 	//카테고리 생성 하기
-	public void SetCategories(String param) {
+	public void RemoveCategories(HomeVo param) {
+		
+		sqlSession.insert("RemoveCategories",param);
+	}
+	
+	//카테고리 삭제 하기
+	public void SetCategories(HomeVo param) {
 		
 		sqlSession.insert("SetCategories",param);
 	}
@@ -107,6 +113,11 @@ public class HomeSvc {
 	public UserVo GetMyInfo(String param) {
 
 		return sqlSession.selectOne("GetMyInfo", param);
+	}
+
+	public void RemovePost(HomeVo param) {
+		
+			sqlSession.delete("RemovePost",param);
 	}
 
 	
