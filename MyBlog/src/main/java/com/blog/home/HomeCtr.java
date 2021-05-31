@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -55,14 +56,15 @@ public class HomeCtr {
 	public String Home(HttpServletRequest req, ModelMap modelMap, HomeSearchVO HomeSearchVO, UserVo UserVo) throws IOException{
 
 		HttpSession session = req.getSession();
-		String s_id = (String) session.getAttribute("session_id");
+		String s_id = (String) session.getAttribute("session_id"); //세션 아이디 가져오기
 
 		HomeSearchVO.pageCalculate(HomeSvc.selectHomeCount(HomeSearchVO)); // 페이징 처리
 		List<?> PostList = HomeSvc.GetPostList(HomeSearchVO); // 게시글 리스트
 		List<HomeVo> CommentList = HomeSvc.GetRecentComments(); // 최근 댓글 리스트
 		List<?> Categories = HomeSvc.GetCategories(); // 카테고리 리스트 가져오기
-		UserVo = HomeSvc.GetMyInfo(s_id);
+		UserVo = HomeSvc.GetMyInfo(s_id);	//내 정보 가져오기
 		
+		//네이버 로그인
 		SecureRandom random = new SecureRandom();
 		String state = new BigInteger(130, random).toString();
 		String N_clientId = "P3DILcndDBYRpCcWvUq0";
@@ -75,6 +77,17 @@ public class HomeCtr {
 		N_apiURL += "&state=" + state;
 		session.setAttribute("state", state);
 		
+		//카카오 로그인
+		String K_clientId = "1cc6ba13ef828544b70efacdf8c7d570";
+		//아마존 서버
+		//String K_redirectURI = URLEncoder.encode("http://3.34.54.186:8080/Spring_individual_project/K_callback", "UTF-8");
+		//로컬 서버
+		String K_redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
+		String K_apiURL = "https://kauth.kakao.com/oauth/authorize?response_type=code";
+		K_apiURL += "&client_id=" + K_clientId;
+		K_apiURL += "&redirect_uri=" + K_redirectURI;
+		
+		modelMap.addAttribute("K_apiURL", K_apiURL);
 		modelMap.addAttribute("N_apiURL", N_apiURL);
 		modelMap.addAttribute("Myinfo", UserVo);
 		modelMap.addAttribute("so", HomeSearchVO);
@@ -230,6 +243,145 @@ public class HomeCtr {
 			}
 		}
 		
+		//카카오 콜백
+		@RequestMapping(value = "K_callback")
+		public String KakaoCallback(HttpServletRequest request, HttpServletResponse response)
+				throws UnsupportedEncodingException {
+			
+			System.out.println("카카오 콜백 11111111111111111111111111111111111111111111111111111111");
+			String clientId = "1cc6ba13ef828544b70efacdf8c7d570";  // ﻿REST API키!
+			String code = request.getParameter("code");
+			System.out.println("code : " + code);
+			//아마존 서버
+//			String redirectURI = URLEncoder.encode("http://3.34.54.186:8080/Spring_individual_project/K_callback", "UTF-8");
+			//로컬 서버
+			String redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
+			String apiURL;
+			apiURL = "https://kauth.kakao.com/oauth/token?grant_type=authorization_code&";
+			apiURL += "client_id=" + clientId;
+			apiURL += "&redirect_uri=" + redirectURI;
+			apiURL += "&code=" + code;
+			String access_token = "";
+			String refresh_token = "";
+			System.out.println("apiURL=" + apiURL);
+
+			try {
+				URL url = new URL(apiURL);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("GET");
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				System.out.print("responseCode=" + responseCode);
+				if (responseCode == 200) {
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else {
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					res.append(inputLine);
+				}
+				br.close();
+				if (responseCode == 200) {
+					System.out.println(res.toString());
+					JSONParser parsing = new JSONParser();
+					Object obj = parsing.parse(res.toString());
+					JSONObject jsonObj = (JSONObject) obj;
+
+					access_token = (String) jsonObj.get("access_token");
+					refresh_token = (String) jsonObj.get("refresh_token");
+
+					System.out.println("acc_to: " + access_token);
+					System.out.println("refresh_token : " + refresh_token);
+
+					Kakaoinfo(request, response, access_token); //kakaoinfo에 값들을 전달하여 본인 정보를 받아오는 곳
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			return "redirect:/Home";
+		}
+		
+		//카카오 인포
+		private void Kakaoinfo(HttpServletRequest req, HttpServletResponse response, String access_token) {
+			System.out.println("카카오 인포 11111111111111111111111111111111111111111111111111111111");
+			
+			String reqURL = "https://kapi.kakao.com/v2/user/me";
+			String name = "";
+			String nickname = "";
+			String email = "";
+			String profileimg = "";
+			long id1 = 0;  //id값이 long형태임 (String이나 int는 안됨)
+			
+			UserVo uo = new UserVo();
+			
+			try {
+				URL url = new URL(reqURL);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("POST");
+				con.setRequestProperty("Authorization", "Bearer " + access_token);
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				System.out.print("responseCode=" + responseCode);
+				if (responseCode == 200) {
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else {
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					res.append(inputLine);
+				}
+				br.close();
+	            System.out.println(inputLine); //여기서 json형태로 정보값들을 받아옴
+
+				if (responseCode == 200) {
+					System.out.println(res.toString());
+					JSONParser parsing = new JSONParser();
+					Object obj = parsing.parse(res.toString());
+					JSONObject jsonObj = (JSONObject) obj;
+					JSONObject properties = (JSONObject) obj;
+					JSONObject kakao_account = (JSONObject) obj;
+
+					properties = (JSONObject) jsonObj.get("properties");
+					kakao_account = (JSONObject) jsonObj.get("kakao_account");
+
+					id1 = (long) jsonObj.get("id");
+					nickname = (String) properties.get("nickname");
+					email = (String) kakao_account.get("email");
+					profileimg = (String) properties.get("profile_image");
+					
+					
+					System.out.println("properties" + properties);
+					System.out.println("id : " + id1);
+					System.out.println("nickname : " + nickname);
+					System.out.println("메일 : " + email);
+					System.out.println("img : "+profileimg);
+					
+					String id = String.valueOf(id1);
+					int check = UserSvc.idCheck(id);
+					
+					if(check == 0) {
+						uo = new UserVo(id,name,email,nickname,profileimg);
+						UserSvc.SetSignUp(uo);
+						System.out.println("회원가입 완료");
+					}else {
+						System.out.println("로그인 됨");
+					}
+					UserCtr uc = new UserCtr();
+					
+					uc.HomeLoginPost(req, uo, null);
+					
+					HttpSession session = req.getSession();
+					session.setAttribute("session_id", id);
+					
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
 
 	/* 카테고리 생성 */
 	@RequestMapping(value = "Categories", method = RequestMethod.POST)

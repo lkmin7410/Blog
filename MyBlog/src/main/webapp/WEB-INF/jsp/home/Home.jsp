@@ -200,7 +200,7 @@
 									<hr>
 									<ul class="mb-0">
 										<li><a href="${N_apiURL}"> 네이버 로그인</a></li>
-										<li>카카오 로그인</li>
+										<li> <a href="${K_apiURL}"> 카카오 로그인</a></li>
 										<li><a href="SignUp">회원가입</a></li>
 									</ul>
 								</div>
@@ -229,9 +229,7 @@
 									style="border: solid 1px white; padding: 5px;">
 									<ul class="list-unstyled mb-0">
 										<li><img alt="" src="${Myinfo.userimg}" /></li>
-										<li><c:if test="${empty Myinfo.userpw}">
-										(네이버)
-										</c:if><a href="#!">${Myinfo.usernickname} </a></li>
+										<li><a href="#!">${Myinfo.usernickname} </a></li>
 										<li>
 											<p>${Myinfo.userIntroduction}</p>
 										</li>

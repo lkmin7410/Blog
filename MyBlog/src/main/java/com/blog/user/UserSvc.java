@@ -32,4 +32,10 @@ public class UserSvc {
 
 			sqlSession.insert("SetMyInfo",param);
 		}
+		
+		//내 정보 수정(프로필사진)
+		public void SetMyInfoImg(UserVo param) {
+
+			sqlSession.insert("SetMyInfoImg",param);
+		}
 }

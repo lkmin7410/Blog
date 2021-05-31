@@ -96,7 +96,13 @@ public class UserCtr {
 		PrintWriter printWriter = null;
 		OutputStream out = null;
 		MultipartFile file = multiFile.getFile("img_file");
-		if (file != null) {
+		
+		if(file.getSize() <= 0) {
+		UserSvc.SetMyInfo(UserVo);
+		
+		resp.sendRedirect("HomeAdmin");
+		
+		} else if (file != null) {
 			if (file.getSize() > 0 && StringUtils.isNotBlank(file.getName())) {
 				if (file.getContentType().toLowerCase().startsWith("image/")) {
 					try {
@@ -124,7 +130,7 @@ public class UserCtr {
 						json.addProperty("url", fileUrl);
 						
 						UserVo.setUserimg(fileUrl);
-						UserSvc.SetMyInfo(UserVo);
+						UserSvc.SetMyInfoImg(UserVo);
 
 						resp.sendRedirect("HomeAdmin");
 						
