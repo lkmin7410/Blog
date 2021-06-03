@@ -110,9 +110,10 @@ table {
 							<input type="hidden" name="categories" value="${so.categories}">
 						</c:if>
 					</h1>
-
 				</form>
-
+				
+				<!-- 내 정보 수정하는 div -->
+				
 				<form action="MyinfoEdit" method="post" class="profile"
 					enctype="multipart/form-data">
 					<!-- 내 정보 -->
@@ -144,11 +145,9 @@ table {
 						</div>
 					</div>
 				</form>
+				
 				<!-- 메뉴,글 관리 -->
 				<div class="card mb-4 menu">
-					<!-- <img class="card-img-top"
-							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
-
 					<div class="card-body">
 						<form action="HomeAdmin" name="s_form" method="post">
 							<input type="checkbox" onclick="selectAll(this)"
@@ -180,7 +179,8 @@ table {
 							</table>
 						</form>
 						<hr>
-						<form action="deleteAction" method="post">
+						<!-- 게시글 리스트 -->
+						<form action="deleteAction" method="post" name="p_form">
 							<table>
 								<c:forEach var="p" items="${PostList}">
 									<tr
@@ -205,9 +205,35 @@ table {
 
 							</table>
 							<input type="submit" value="삭제">
+						 <button type="button" class="public_button">관리</button>
+						<div class="public_div" style="display: none;">
+							<input type="button" onclick="public_a(1)" value="전체공개">
+							<input type="button" onclick="public_a(2)" value="비공개">
+						</div>
 						</form>
 					</div>
 				</div>
+				
+				<script type="text/javascript">
+				$(function() {
+					$('.public_button').click(function() {
+						$('.public_div').toggle();
+					});
+				});
+				</script>
+				
+				<script type="text/javascript">
+					function public_a(index) {
+						if(index == 1){
+							document.p_form.action='multi_public';
+						}
+						if(index == 2){
+							document.p_form.action='multi_private';
+						}
+						document.p_form.submit();
+					}
+				</script>
+				
 
 				<!-- 페이징 설정을 위한 Startnum, Lastnum, Page 변수 -->
 				<c:set var="page" value="${so.page}"></c:set>

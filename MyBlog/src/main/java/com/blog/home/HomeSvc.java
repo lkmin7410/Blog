@@ -61,6 +61,13 @@ public class HomeSvc {
 		sqlSession.selectOne("Edit_Write", param);
 	}
 	
+	//일괄 공개설정 수정
+	public void Edit_Public(HomeVo param) {
+
+		sqlSession.selectOne("Edit_Public", param);
+	}
+	
+	
 	//글 삭제
 	public void Remove_Post(HomeVo param) {
 

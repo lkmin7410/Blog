@@ -1,5 +1,11 @@
 package com.blog.user;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +44,5 @@ public class UserSvc {
 
 			sqlSession.insert("SetMyInfoImg",param);
 		}
+		
 }

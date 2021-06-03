@@ -69,7 +69,7 @@ p>img {
 				<h1 class="mt-4">${HomeVo.title}</h1>
 				<!-- Author-->
 				<p class="lead">
-					by <a href="#!">${HomeVo.writer}</a>
+					by <a href="#!">${HomeVo.usernickname}</a>
 				</p>
 				<hr />
 				<!-- Date and time-->

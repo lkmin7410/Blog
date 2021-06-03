@@ -74,14 +74,20 @@
 	<!-- Home 글 쓰기 -->
 	<insert id="SetWrite" parameterType="com.blog.home.HomeVo">
 		insert into
-		post(categories,public_setting,reply_setting,title,content,writer)
-		values('${categories}','${public_setting}','${reply_setting}','${title}','${content}','${writer}')
+		post(categories,public_setting,reply_setting,title,content,writer,usernickname)
+		values('${categories}','${public_setting}','${reply_setting}','${title}','${content}','${writer}','${usernickname}')
 	</insert>
 
 	<!-- Home 게시글 수정 -->
 	<update id="Edit_Write" parameterType="com.blog.home.HomeVo">
 		UPDATE post SET
 		public_setting='${public_setting}', reply_setting='${reply_setting}', title='${title}', content='${content}' WHERE seq=${seq};
+	</update>
+	
+	<!-- Home 관리 공개설정 수정 -->
+	 <update id="Edit_Public" parameterType="com.blog.home.HomeVo">
+		UPDATE post SET
+		public_setting='${public_setting}' WHERE seq=${seq};
 	</update>
 
 	<!-- Forum 게시글 삭제 -->

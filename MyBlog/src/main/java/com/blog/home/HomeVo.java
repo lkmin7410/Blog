@@ -14,8 +14,15 @@ public class HomeVo {
 	private String title;
 	private String content;
 	private String writer;
+	private String usernickname;
 	private Date regdate;
 	
+	public String getUsernickname() {
+		return usernickname;
+	}
+	public void setUsernickname(String usernickname) {
+		this.usernickname = usernickname;
+	}
 	
 	public String getReply_setting() {
 		return reply_setting;

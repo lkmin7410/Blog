@@ -61,7 +61,7 @@
 							Home <span class="sr-only">(current)</span>
 					</a></li>
 					<c:if test="${not empty sessionScope.session_id}">
-						<li class="nav-item"><a class="nav-link" href="Logout">로그아웃</a></li>
+						<li class="nav-item"><a class="nav-link" href="${K_LogOutapiURL}">로그아웃</a></li>
 					</c:if>
 
 					<c:if test="${empty sessionScope.session_id}">

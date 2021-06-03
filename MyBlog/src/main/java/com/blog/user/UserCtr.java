@@ -180,9 +180,8 @@ public class UserCtr {
 	@RequestMapping(value = "/Logout")
 	public String Logout(HttpServletRequest req, UserVo uo, ModelMap modelMap) throws MalformedURLException {
 		HttpSession session = req.getSession();
-
 		session.removeAttribute("session_id");
-
+		
 		return "redirect:/Home";
 	}
 
