@@ -39,6 +39,12 @@
 
 </head>
 <body>
+
+	<!-- 페이징 설정을 위한 Startnum, Lastnum, Page 변수 -->
+	<c:set var="page" value="${so.page}"></c:set>
+	<c:set var="startNum" value="${page-(page-1)%5}"></c:set>
+	<c:set var="lastNum" value="${so.pageEnd}"></c:set>
+
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
@@ -61,7 +67,8 @@
 							Home <span class="sr-only">(current)</span>
 					</a></li>
 					<c:if test="${not empty sessionScope.session_id}">
-						<li class="nav-item"><a class="nav-link" href="${K_LogOutapiURL}">로그아웃</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="${K_LogOutapiURL}">로그아웃</a></li>
 					</c:if>
 
 					<c:if test="${empty sessionScope.session_id}">
@@ -89,14 +96,77 @@
 						</c:if>
 					</h1>
 				</form>
+				<button class="menu_button">목록 열기</button>
+
+				<script type="text/javascript">
+					$(function() {
+						$('.menu_button').click(function() {
+							$('.menu-b').toggle();
+						});
+					});
+				</script>
+
+				<!-- 목록 보기  -->
+				<div class="card mb-4 menu-b" id="menu_b" style="display: none;">
+					<div class="card-body">
+						<p style="display: inline-block;">제목</p>
+						<p style="float: right;">작성일</p>
+						<c:forEach var="m" items="${PostList}">
+							<c:choose>
+								<c:when test="${m.public_setting =='전체공개'}">
+									<div>
+										<a class="card-title" href="HomePost?seq=${m.seq}">${m.title}</a>
+										<div class=" text-muted" style="float: right;">${m.regdate}</div>
+									</div>
+								</c:when>
+								<c:when test="${sessionScope.session_id == m.writer}">
+									<div>
+										<c:if test="${m.public_setting == '비공개'}">
+											<a class="card-title" href="HomePost?seq=${m.seq}">🔒
+												${m.title}</a>
+										</c:if>
+										<div class=" text-muted" style="float: right;">${m.regdate}</div>
+									</div>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</div>
+					<!-- Pagination-->
+					<ul class="pagination justify-content-center mb-4">
+						<c:if test="${startNum > 1}">
+							<li class="page-item"><a class="page-link"
+								href="?page=${startNum-1}">← Older</a></li>
+						</c:if>
+						<c:if test="${startNum <= 1}">
+							<li><a class="page-link" href="#"
+								onclick="alert('첫번째 페이지 입니다.');">← Older</a></li>
+						</c:if>
+
+						<!-- 페이징 -->
+						<c:forEach var="i" begin="0" end="4">
+							<c:if test="${(startNum+i) <= lastNum}">
+								<li><a class="page-link"
+								href="Home?page=${startNum+i}">${startNum+i}</a></li>
+							</c:if>
+						</c:forEach>
+						
+						<c:if test="${startNum+5 <= lastNum}">
+							<li class="page-item disabled"><a class="page-link"
+								href="?page=${startNum+5}">Newer →</a></li>
+						</c:if>
+						<c:if test="${startNum+5 > lastNum}">
+							<li><a class="page-link" href="#"
+								onclick="alert('마지막 페이지 입니다.');">Newer →</a></li>
+						</c:if>
+					</ul>
+				</div>
+
 
 				<!-- Blog post-->
 				<c:forEach var="i" items="${PostList}">
 					<c:choose>
 						<c:when test="${i.public_setting =='전체공개'}">
 							<div class="card mb-4">
-								<!-- <img class="card-img-top"
-							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
 								<div class="card-body">
 									<h2 class="card-title">${i.title}</h2>
 									<p class="card-text">${i.content}</p>
@@ -108,8 +178,6 @@
 						</c:when>
 						<c:when test="${sessionScope.session_id == i.writer}">
 							<div class="card mb-4">
-								<!-- <img class="card-img-top"
-							src="https://via.placeholder.com/750x300" alt="Card image cap" /> -->
 								<div class="card-body">
 									<c:if test="${i.public_setting == '비공개'}">
 										<h2 class="card-title">🔒 ${i.title}</h2>
@@ -125,10 +193,7 @@
 					</c:choose>
 				</c:forEach>
 
-				<!-- 페이징 설정을 위한 Startnum, Lastnum, Page 변수 -->
-				<c:set var="page" value="${so.page}"></c:set>
-				<c:set var="startNum" value="${page-(page-1)%5}"></c:set>
-				<c:set var="lastNum" value="${so.pageEnd}"></c:set>
+
 
 				<!-- Pagination-->
 				<ul class="pagination justify-content-center mb-4">
@@ -200,7 +265,7 @@
 									<hr>
 									<ul class="mb-0">
 										<li><a href="${N_apiURL}"> 네이버 로그인</a></li>
-										<li> <a href="${K_apiURL}"> 카카오 로그인</a></li>
+										<li><a href="${K_apiURL}"> 카카오 로그인</a></li>
 										<li><a href="SignUp">회원가입</a></li>
 									</ul>
 								</div>

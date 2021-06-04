@@ -78,17 +78,20 @@ public class HomeCtr {
 		// 카카오 로그인
 		String K_clientId = "1cc6ba13ef828544b70efacdf8c7d570";
 		// 아마존 서버
-		// String K_redirectURI =
-		// URLEncoder.encode("http://3.34.54.186:8080/Spring_individual_project/K_callback",
-		// "UTF-8");
+		// String K_redirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_callback","UTF-8");
 		// 로컬 서버
 		String K_redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
 		String K_apiURL = "https://kauth.kakao.com/oauth/authorize?response_type=code";
 		K_apiURL += "&client_id=" + K_clientId;
 		K_apiURL += "&redirect_uri=" + K_redirectURI;
 		
+		//카카오 로그아웃 URI 
+		//아마존 서버
+//		String K_LogoutredirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_logout", "UTF-8");
+		//로컬 서
 		String K_LogoutredirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_logout", "UTF-8");
 		String K_LogOutapiURL = "https://kauth.kakao.com/oauth/logout?client_id="+ K_clientId +"&logout_redirect_uri="+ K_LogoutredirectURI;
+		//글쓴이 아아디를 닉네임으로 보이게
 		if(s_id != null) {
 			session.setAttribute("session_usernickname", UserVo.getUsernickname());
 		}
@@ -401,39 +404,23 @@ public class HomeCtr {
 		}
 	}
 
-//		다중 공개설정
-	@RequestMapping(value = "multi_public", method = RequestMethod.POST)
-	public String multi_public(HttpServletRequest req, HomeVo HomeVo) {
-		System.out.println("1111111111111111111컨트롤러 진입");
-		String[] abc = req.getParameterValues("p_checkbox");
-
-		for (String a : abc) {
-			System.out.println("카테고리 : " + a);
-			HomeVo.setPublic_setting("전체공개");
+	//관리 다중설정 (댓글, 공개설정 여부)
+	@RequestMapping(value= "multi", method = RequestMethod.POST)
+	public String multi(HttpServletRequest req, HomeVo HomeVo) {
+		
+		System.out.println("multi 들어옴");
+		String [] abc = req.getParameterValues("p_checkbox");
+		
+		for(String a : abc) {
 			HomeVo.setSeq(Integer.parseInt(a));
-			System.out.println("HomeVo.publicSet : " + HomeVo.getPublic_setting());
-			HomeSvc.Edit_Public(HomeVo);
+			System.out.println("public >> " + HomeVo.getPublic_setting());
+			System.out.println("reply >> " + HomeVo.getReply_setting());
+			HomeSvc.Multi_Edit(HomeVo);
 		}
-
+		
 		return "redirect:/HomeAdmin";
 	}
-
-//	다중 비공개설정
-	@RequestMapping(value = "multi_private", method = RequestMethod.POST)
-	public String multi_private(HttpServletRequest req, HomeVo HomeVo) {
-
-		System.out.println("multi_private 컨트롤러 진입");
-		String[] abc = req.getParameterValues("p_checkbox");
-
-		for (String a : abc) {
-			System.out.println("카테고리 : " + a);
-			HomeVo.setSeq(Integer.parseInt(a));
-			HomeVo.setPublic_setting("비공개");
-			HomeSvc.Edit_Public(HomeVo);
-		}
-
-		return "redirect:/HomeAdmin";
-	}
+	
 
 	/* 카테고리 생성 */
 	@RequestMapping(value = "Categories", method = RequestMethod.POST)

@@ -62,9 +62,9 @@ public class HomeSvc {
 	}
 	
 	//일괄 공개설정 수정
-	public void Edit_Public(HomeVo param) {
+	public void Multi_Edit(HomeVo param) {
 
-		sqlSession.selectOne("Edit_Public", param);
+		sqlSession.selectOne("Multi_Edit", param);
 	}
 	
 	

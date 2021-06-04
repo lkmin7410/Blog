@@ -85,9 +85,9 @@
 	</update>
 	
 	<!-- Home 관리 공개설정 수정 -->
-	 <update id="Edit_Public" parameterType="com.blog.home.HomeVo">
+	 <update id="Multi_Edit" parameterType="com.blog.home.HomeVo">
 		UPDATE post SET
-		public_setting='${public_setting}' WHERE seq=${seq};
+		public_setting='${public_setting}', reply_setting = '${reply_setting}' WHERE seq=${seq};
 	</update>
 
 	<!-- Forum 게시글 삭제 -->

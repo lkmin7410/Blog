@@ -173,8 +173,9 @@ table {
 											<option ${(param.public_setting=="비공개")?"selected":""}
 												value="비공개">비공개</option>
 									</select></td>
-									<td style="width: 300px; text-align: center;">제목</td>
-									<td>등록일</td>
+									<td style="width: 100px ; text-align: center;"> 댓글 </td>
+									<td style="width: 150px; text-align: center;">제목</td>
+									<td style="width: 150px;">등록일</td>
 								</tr>
 							</table>
 						</form>
@@ -193,7 +194,10 @@ table {
 										<td style="width: 150px;">
 											<p>${p.public_setting}</p>
 										</td>
-										<td style="width: 300px; text-align: center;">
+										<td style="width: 100px; text-align: center;">
+											<p>${p.reply_setting}</p>
+										</td>
+										<td style="width: 150px; text-align: center;">
 											<p>${p.title}</p>
 										</td>
 										<td>
@@ -207,12 +211,33 @@ table {
 							<input type="submit" value="삭제">
 						 <button type="button" class="public_button">관리</button>
 						<div class="public_div" style="display: none;">
-							<input type="button" onclick="public_a(1)" value="전체공개">
-							<input type="button" onclick="public_a(2)" value="비공개">
+										
+					<div class="save_button">
+						<span>공개 여부</span>
+						<input type="radio" name="public_setting" checked="checked" value="전체공개">전체 공개
+						<input type="radio" name="public_setting" value="비공개">비공개
+						<br>
+						<span>댓글 여부</span>
+						<input type="radio" name="reply_setting" checked="checked" value="Y">허용
+						<input type="radio" name="reply_setting" value="N">불허
+						<br>
+					 <button class="btn btn-primary" onclick = "multi_b()">저장</button>
+					</div>
+						
+						<!-- 	<input type="button" onclick="public_a(1)" value="전체공개">
+							<input type="button" onclick="public_a(2)" value="비공개"> -->
 						</div>
 						</form>
 					</div>
 				</div>
+				
+				<script type="text/javascript">
+					function multi_b() {
+						document.p_form.action='multi';
+						document.p_form.submit();
+					}
+				</script>
+				
 				
 				<script type="text/javascript">
 				$(function() {
