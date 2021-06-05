@@ -35,6 +35,14 @@
 .newcategories {
 	display: none;
 }
+
+#menu_b{
+	height: 150px;
+	overflow: scroll;
+}
+#menu_b::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
 </style>
 
 </head>
@@ -96,7 +104,7 @@
 						</c:if>
 					</h1>
 				</form>
-				<button class="menu_button">목록 열기</button>
+				<button class="menu_button btn btn-primary">목록 보기</button>
 
 				<script type="text/javascript">
 					$(function() {
@@ -111,7 +119,7 @@
 					<div class="card-body">
 						<p style="display: inline-block;">제목</p>
 						<p style="float: right;">작성일</p>
-						<c:forEach var="m" items="${PostList}">
+						<c:forEach var="m" items="${List}">
 							<c:choose>
 								<c:when test="${m.public_setting =='전체공개'}">
 									<div>
@@ -131,34 +139,6 @@
 							</c:choose>
 						</c:forEach>
 					</div>
-					<!-- Pagination-->
-					<ul class="pagination justify-content-center mb-4">
-						<c:if test="${startNum > 1}">
-							<li class="page-item"><a class="page-link"
-								href="?page=${startNum-1}">← Older</a></li>
-						</c:if>
-						<c:if test="${startNum <= 1}">
-							<li><a class="page-link" href="#"
-								onclick="alert('첫번째 페이지 입니다.');">← Older</a></li>
-						</c:if>
-
-						<!-- 페이징 -->
-						<c:forEach var="i" begin="0" end="4">
-							<c:if test="${(startNum+i) <= lastNum}">
-								<li><a class="page-link"
-								href="Home?page=${startNum+i}">${startNum+i}</a></li>
-							</c:if>
-						</c:forEach>
-						
-						<c:if test="${startNum+5 <= lastNum}">
-							<li class="page-item disabled"><a class="page-link"
-								href="?page=${startNum+5}">Newer →</a></li>
-						</c:if>
-						<c:if test="${startNum+5 > lastNum}">
-							<li><a class="page-link" href="#"
-								onclick="alert('마지막 페이지 입니다.');">Newer →</a></li>
-						</c:if>
-					</ul>
 				</div>
 
 

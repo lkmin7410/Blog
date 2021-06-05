@@ -19,12 +19,24 @@ public class HomeSvc {
 
 		return sqlSession.selectOne("selectHomeCount", param);
 	}
+	
+	//Home 나의 글 목록 갯수 가져오기
+		public Integer selectMyListCount(HomeSearchVO param) {
+
+			return sqlSession.selectOne("selectMyListCount", param);
+		}
 
 	//글 목록 가져오기
 	public List<?> GetPostList(HomeSearchVO param){
 		
 		return sqlSession.selectList("GetPostList",param);
 	}
+	
+	//목록 가져오기
+		public List<?> GetList(HomeSearchVO param){
+			
+			return sqlSession.selectList("GetList",param);
+		}
 	
 	//글 목록 가져오기
 		public List<?> GetMYPostList(HomeSearchVO param){
