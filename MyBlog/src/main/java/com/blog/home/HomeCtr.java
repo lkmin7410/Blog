@@ -79,18 +79,18 @@ public class HomeCtr {
 		// 카카오 로그인
 		String K_clientId = "1cc6ba13ef828544b70efacdf8c7d570";
 		// 아마존 서버
-		// String K_redirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_callback","UTF-8");
+		 String K_redirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_callback","UTF-8");
 		// 로컬 서버
-		String K_redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
+//		String K_redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
 		String K_apiURL = "https://kauth.kakao.com/oauth/authorize?response_type=code";
 		K_apiURL += "&client_id=" + K_clientId;
 		K_apiURL += "&redirect_uri=" + K_redirectURI;
 		
 		//카카오 로그아웃 URI 
 		//아마존 서버
-//		String K_LogoutredirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_logout", "UTF-8");
-		//로컬 서
-		String K_LogoutredirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_logout", "UTF-8");
+		String K_LogoutredirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_logout", "UTF-8");
+		//로컬 서버 
+//		String K_LogoutredirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_logout", "UTF-8");
 		String K_LogOutapiURL = "https://kauth.kakao.com/oauth/logout?client_id="+ K_clientId +"&logout_redirect_uri="+ K_LogoutredirectURI;
 		//글쓴이 아아디를 닉네임으로 보이게
 		if(s_id != null) {
