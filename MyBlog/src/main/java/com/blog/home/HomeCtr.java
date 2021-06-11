@@ -382,20 +382,7 @@ public class HomeCtr {
 
 		return "redirect:/HomePost?seq=" + HomeCommentVo.getPost_seq();
 	}
-	
-	//카카오 로그아웃 url
-		@RequestMapping(value = "K_logout")
-		public String K_logout(HttpServletRequest req, HttpServletResponse resp) {
-			
-			System.out.println("카카오 로그아웃 들어옴");
-			
-			HttpSession session = req.getSession();
-			session.removeAttribute("session_id");
-			session.removeAttribute("access_token");
-			
-			return "redirect:/Home";
 
-		}
 
 		// 네이버 로그인 콜백
 		@RequestMapping(value = "N_callback")
@@ -550,9 +537,9 @@ public class HomeCtr {
 			String code = request.getParameter("code");
 			System.out.println("code : " + code);
 			// 아마존 서버
-//				String redirectURI = URLEncoder.encode("http://3.34.54.186:8080/Spring_individual_project/K_callback", "UTF-8");
+			String redirectURI = URLEncoder.encode("http://3.34.54.186:8080/MyBlog/K_callback", "UTF-8");
 			// 로컬 서버
-			String redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
+//			String redirectURI = URLEncoder.encode("http://localhost:8080/MyBlog/K_callback", "UTF-8");
 			String apiURL;
 			apiURL = "https://kauth.kakao.com/oauth/token?grant_type=authorization_code&";
 			apiURL += "client_id=" + clientId;
@@ -678,5 +665,18 @@ public class HomeCtr {
 				System.out.println(e);
 			}
 		}
+		
+		//카카오 로그아웃 url
+			@RequestMapping(value = "K_logout")
+			public String K_logout(HttpServletRequest req, HttpServletResponse resp) {
+				
+				System.out.println("카카오 로그아웃 들어옴");
+				
+				HttpSession session = req.getSession();
+				session.removeAttribute("session_id");
+				session.removeAttribute("access_token");
+				
+				return "redirect:/Home";
 
+			}
 }
